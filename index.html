@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Mazaj · مزاج</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%; background:#161616; font-family:'Cairo','Segoe UI',sans-serif; color:#161616; overflow:hidden; user-select:none;}
+  #app{width:100vw; height:100vh; height:100dvh; background:#fff; position:relative; overflow:hidden; display:flex; flex-direction:column;}
+  .hidden{display:none !important;}
+  button{font-family:inherit; cursor:pointer; touch-action:manipulation;}
+
+  /* ===== LAYOUT ===== */
+  .screen{width:100%; height:100%; display:flex; flex-direction:column; overflow-y:auto; padding:12px 16px;}
+  .center-flex{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; flex:1;}
+
+  /* ===== LANGUAGE TOGGLE (fixed, clean, not overlapping) ===== */
+  .lang-switch{
+    position:fixed; top:12px; right:16px; z-index:60;
+    display:flex; background:#fff; border:2px solid #161616; border-radius:40px; overflow:hidden;
+    box-shadow:0 2px 0 #e6ad00;
+  }
+  html[dir="rtl"] .lang-switch{ right:auto; left:16px; }
+  .lang-switch button{
+    border:none; background:transparent; padding:6px 14px; font-size:14px; font-weight:800;
+    color:#161616; transition:0.1s; min-width:48px;
+  }
+  .lang-switch button.active{ background:#ffc72c; }
+
+  /* ===== MAIN MENU (with proper spacing, no overlap) ===== */
+  #menu-screen{ padding-top:70px; } /* leave space for lang toggle */
+  #menu-screen .logo-wrap{ display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+  #menu-screen .logo-wrap svg{ width:48px; height:48px; }
+  .brand-title{ font-size:32px; font-weight:800; letter-spacing:0.5px; }
+  .brand-tagline{ font-size:13px; color:#666; font-weight:600; margin-bottom:8px; }
+
+  .menu-btn{
+    background:#fff; border:3px solid #161616; border-radius:60px; padding:14px 32px;
+    font-weight:800; font-size:18px; width:200px; text-align:center; transition:0.05s;
+    box-shadow:0 4px 0 #e6ad00; position:relative; z-index:1;
+  }
+  .menu-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #e6ad00; }
+  .menu-btn.yellow{ background:#ffc72c; }
+  .menu-btn.black{ background:#161616; color:#fff; border-color:#ffc72c; }
+
+  .menu-divider{ width:60px; height:2px; background:#dadada; margin:2px 0; }
+
+  /* ===== SETUP SCREEN (team config) ===== */
+  .setup-teams{ display:flex; gap:16px; width:100%; max-width:560px; justify-content:center; flex-wrap:wrap; }
+  .team-card{
+    flex:1; min-width:200px; max-width:260px;
+    border:3px solid #161616; border-radius:16px; padding:12px 14px;
+    background:#fff; display:flex; flex-direction:column; gap:6px;
+  }
+  .team-card.o-card{ border-color:#e6ad00; background:#fffcf0; }
+  .team-card h3{ font-size:15px; display:flex; align-items:center; gap:6px; margin:0; }
+  .symbol-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:6px; font-weight:800; font-size:15px;
+  }
+  .symbol-badge.x{ background:#161616; color:#fff; }
+  .symbol-badge.o{ background:#ffc72c; color:#161616; }
+  .team-card label{ font-size:11px; font-weight:700; color:#555; }
+  .team-card input, .team-card select{
+    font-family:inherit; font-size:14px; padding:8px 10px; border:2px solid #dadada;
+    border-radius:8px; font-weight:700; width:100%; background:#fff;
+  }
+  .team-card select{ appearance:auto; }
+
+  .btn-primary{
+    background:#ffc72c; border:3px solid #161616; border-radius:60px;
+    font-weight:800; font-size:18px; padding:12px 36px; box-shadow:0 4px 0 #e6ad00;
+  }
+  .btn-primary:active{ transform:translateY(3px); box-shadow:0 1px 0 #e6ad00; }
+  .btn-secondary{
+    background:#fff; border:2px solid #161616; border-radius:60px;
+    font-weight:700; font-size:13px; padding:8px 20px;
+  }
+  .btn-ghost{
+    background:transparent; border:2px solid #dadada; border-radius:60px;
+    font-weight:700; font-size:12px; padding:6px 16px; color:#555;
+  }
+
+  /* ===== GAME SCREEN ===== */
+  #game-screen{ padding:6px 8px; height:100%; display:flex; flex-direction:column; }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:4px 10px; border-bottom:2px solid #161616; flex-shrink:0; gap:6px;
+  }
+  .topbar-left{ display:flex; align-items:center; gap:6px; }
+  .topbar-left svg{ width:28px; height:28px; }
+  .topbar-title{ font-weight:800; font-size:16px; }
+  .turn-pill{
+    display:flex; align-items:center; gap:6px;
+    background:#ededed; border-radius:40px; padding:4px 16px; font-weight:800; font-size:14px;
+    border:2px solid #161616; transition:background 0.15s;
+  }
+  .turn-pill.turn-x{ background:#161616; color:#fff; }
+  .turn-pill.turn-o{ background:#ffc72c; color:#161616; }
+  .topbar-right{ display:flex; align-items:center; gap:6px; }
+
+  .game-main{
+    flex:1; display:flex; align-items:center; justify-content:center;
+    gap:10px; padding:6px 4px; min-height:0;
+  }
+  .side-panel{
+    width:120px; flex-shrink:0;
+    border:3px solid #161616; border-radius:14px; padding:8px 10px;
+    display:flex; flex-direction:column; gap:2px; height:min(82vh,480px);
+    justify-content:center; background:#fff;
+  }
+  .side-panel.o-panel{ border-color:#e6ad00; background:#fffcf0; }
+  .side-panel .panel-symbol{
+    width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:18px; margin-bottom:2px;
+  }
+  .side-panel.x-panel .panel-symbol{ background:#161616; color:#fff; }
+  .side-panel.o-panel .panel-symbol{ background:#ffc72c; color:#161616; }
+  .side-panel .panel-name{ font-weight:800; font-size:14px; word-break:break-word; }
+  .side-panel .panel-meta{ font-size:10px; color:#666; font-weight:700; }
+
+  .board-wrap{ display:flex; align-items:center; justify-content:center; height:100%; width:100%; }
+  #board{
+    display:grid; grid-template-columns:repeat(10,1fr); grid-template-rows:repeat(10,1fr);
+    gap:2px; background:#161616; border:3px solid #161616; border-radius:8px;
+    width:min(82vh, 58vw); height:min(82vh, 58vw);
+    max-width:92vw; max-height:74vh;
+  }
+  .cell{
+    background:#fff; border:none; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:clamp(10px,2.2vw,18px); padding:0;
+  }
+  .cell:not(.filled):active{ background:#ededed; }
+  .cell.filled-x{ background:#161616; color:#fff; }
+  .cell.filled-o{ background:#ffc72c; color:#161616; }
+  .cell.win-cell{ outline:3px solid #d8433b; outline-offset:-3px; }
+
+  /* ===== MODALS ===== */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:100;
+    display:flex; align-items:center; justify-content:center; padding:16px;
+  }
+  .modal-box{
+    background:#fff; border-radius:20px; border:3px solid #161616;
+    max-width:480px; width:100%; max-height:90vh; overflow-y:auto;
+    padding:18px 20px; text-align:center; display:flex; flex-direction:column; gap:10px;
+  }
+  .modal-box h2{ margin:0; font-size:18px; font-weight:800; }
+  .modal-sub{ font-size:12px; color:#666; font-weight:700; margin:0; }
+
+  .category-grid{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:4px 0; }
+  .category-btn{
+    flex:1; min-width:110px; border:3px solid #161616; background:#fff; border-radius:14px;
+    padding:14px 6px; font-weight:800; font-size:13px; display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .category-btn:active{ background:#ffc72c; }
+  .category-btn .cat-icon{ font-size:22px; }
+
+  .question-text{
+    font-size:17px; font-weight:700; line-height:1.5; padding:14px 10px;
+    background:#ededed; border-radius:12px; min-height:60px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .answer-reveal{ font-size:14px; font-weight:800; color:#3c9a5f; min-height:20px; }
+  .modal-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .btn-correct{
+    background:#3c9a5f; color:#fff; border:3px solid #161616; border-radius:40px;
+    font-weight:800; font-size:14px; padding:10px 22px;
+  }
+  .btn-wrong{
+    background:#d8433b; color:#fff; border:3px solid #161616; border-radius:40px;
+    font-weight:800; font-size:14px; padding:10px 22px;
+  }
+  .btn-reveal{
+    background:#fff; border:2px solid #161616; border-radius:40px;
+    font-weight:800; font-size:13px; padding:8px 20px;
+  }
+  .result-banner{ font-weight:800; font-size:15px; padding:10px; border-radius:12px; }
+  .result-banner.ok{ background:#e4f5ea; color:#3c9a5f; }
+  .result-banner.fail{ background:#fbeaea; color:#d8433b; }
+  .win-emoji{ font-size:44px; }
+  .rules-text{ text-align:start; font-size:13.5px; line-height:1.7; }
+  .rules-text ul{ margin:4px 0; padding-inline-start:20px; }
+
+  /* ===== INFO PAGES (About / HowTo) ===== */
+  .info-page{ display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:14px; flex:1; padding:20px 16px; }
+  .info-page.active{ display:flex; }
+  .info-page h2{ font-size:26px; background:#ffc72c; padding:2px 24px; border-radius:60px; border:2px solid #161616; display:inline-block; }
+  .info-page p{ font-size:18px; max-width:400px; line-height:1.6; background:#fff; padding:16px 20px; border-radius:30px; border:2px solid #161616; }
+  .info-page .menu-btn{ width:160px; font-size:16px; padding:10px 20px; }
+
+  /* ===== ROTATE HINT ===== */
+  .rotate-hint{
+    display:none; position:fixed; inset:0; background:#161616; color:#fff; z-index:200;
+    flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:20px;
+  }
+  .rotate-hint svg{ width:56px; height:56px; stroke:#ffc72c; }
+  @media (orientation:portrait){ .rotate-hint{ display:flex; } }
+  @media (orientation:landscape){ .rotate-hint{ display:none !important; } }
+
+  /* ===== RTL ===== */
+  html[dir="rtl"] .lang-switch{ right:auto; left:16px; }
+  html[dir="rtl"] .topbar{ flex-direction:row-reverse; }
+  html[dir="rtl"] .topbar-left{ flex-direction:row-reverse; }
+  html[dir="rtl"] .topbar-right{ flex-direction:row-reverse; }
+  html[dir="rtl"] .game-main{ flex-direction:row-reverse; }
+  html[dir="rtl"] .side-panel{ text-align:right; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ROTATE HINT -->
+  <div class="rotate-hint" id="rotateHint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#FFC72C" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2" transform="rotate(90 12 12)"/><path d="M12 2v2M12 20v2"/></svg>
+    <span id="rotateText" style="font-weight:800; font-size:16px;">Please rotate to landscape</span>
+  </div>
+
+  <!-- LANGUAGE SWITCH (fixed, clean, no overlap) -->
+  <div class="lang-switch">
+    <button id="btnLangEn" onclick="setLang('en')">🇬🇧 EN</button>
+    <button id="btnLangAr" onclick="setLang('ar')">🇸🇦 AR</button>
+  </div>
+
+  <!-- ===== MAIN MENU ===== -->
+  <div id="menu-screen" class="screen center-flex" style="justify-content:center; gap:6px; padding-top:70px;">
+    <div class="logo-wrap">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M14 8c1 3-2 3-1 6M24 8c1 3-2 3-1 6M34 8c1 3-2 3-1 6" stroke="#161616" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M12 22h30v16a12 12 0 0 1-12 12H24a12 12 0 0 1-12-12V22z" fill="#FFC72C" stroke="#161616" stroke-width="2.5"/>
+        <path d="M42 26h4a6 6 0 0 1 0 12h-4" fill="none" stroke="#161616" stroke-width="2.5"/>
+        <rect x="10" y="50" width="34" height="4" rx="2" fill="#161616"/>
+      </svg>
+      <h1 class="brand-title" id="menuTitle">Mazaj</h1>
+    </div>
+    <p class="brand-tagline" id="menuTagline">A fun team trivia board game</p>
+    <div style="height:4px;"></div>
+    <button class="menu-btn yellow" id="btnPlay" onclick="showSetup()">▶ Play</button>
+    <button class="menu-btn" id="btnHow" onclick="showInfo('how')">📖 How to Play</button>
+    <button class="menu-btn" id="btnAbout" onclick="showInfo('about')">ℹ️ About</button>
+    <div class="menu-divider"></div>
+    <button class="menu-btn black" id="btnLangMenu" onclick="toggleLangFromMenu()" style="width:140px; font-size:15px; padding:10px 16px;">🌐 Language</button>
+  </div>
+
+  <!-- ===== SETUP SCREEN (team config) ===== -->
+  <div id="setup-screen" class="screen hidden center-flex" style="justify-content:center; gap:8px; padding-top:70px;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <svg viewBox="0 0 64 64" fill="none" style="width:36px;height:36px;">
+        <path d="M14 8c1 3-2 3-1 6M24 8c1 3-2 3-1 6M34 8c1 3-2 3-1 6" stroke="#161616" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M12 22h30v16a12 12 0 0 1-12 12H24a12 12 0 0 1-12-12V22z" fill="#FFC72C" stroke="#161616" stroke-width="2.5"/>
+        <path d="M42 26h4a6 6 0 0 1 0 12h-4" fill="none" stroke="#161616" stroke-width="2.5"/>
+        <rect x="10" y="50" width="34" height="4" rx="2" fill="#161616"/>
+      </svg>
+      <span style="font-weight:800; font-size:20px;" id="setupTitle">Team Setup</span>
+    </div>
+    <div class="setup-teams">
+      <div class="team-card x-card">
+        <h3><span class="symbol-badge x">X</span><span id="teamXLabel">X Team</span></h3>
+        <label id="nameLabelX">Team name</label>
+        <input type="text" id="inputXName" maxlength="18" placeholder="Team X">
+        <label id="playersLabelX">Number of players</label>
+        <select id="selectXCount"></select>
+      </div>
+      <div class="team-card o-card">
+        <h3><span class="symbol-badge o">O</span><span id="teamOLabel">O Team</span></h3>
+        <label id="nameLabelO">Team name</label>
+        <input type="text" id="inputOName" maxlength="18" placeholder="Team O">
+        <label id="playersLabelO">Number of players</label>
+        <select id="selectOCount"></select>
+      </div>
+    </div>
+    <button class="btn-primary" id="btnStartGame" onclick="startGame()">Start Game</button>
+    <button class="btn-ghost" onclick="showMenu()" id="btnBackMenu">← Back</button>
+  </div>
+
+  <!-- ===== GAME SCREEN ===== -->
+  <div id="game-screen" class="hidden" style="height:100%; display:flex; flex-direction:column; padding:4px 6px;">
+    <div class="topbar">
+      <div class="topbar-left">
+        <svg viewBox="0 0 64 64" fill="none" style="width:24px;height:24px;">
+          <path d="M14 8c1 3-2 3-1 6M24 8c1 3-2 3-1 6M34 8c1 3-2 3-1 6" stroke="#161616" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M12 22h30v16a12 12 0 0 1-12 12H24a12 12 0 0 1-12-12V22z" fill="#FFC72C" stroke="#161616" stroke-width="2.5"/>
+          <path d="M42 26h4a6 6 0 0 1 0 12h-4" fill="none" stroke="#161616" stroke-width="2.5"/>
+          <rect x="10" y="50" width="34" height="4" rx="2" fill="#161616"/>
+        </svg>
+        <span class="topbar-title" id="gameTitle">Mazaj</span>
+      </div>
+      <div class="turn-pill" id="turnPill">Team X</div>
+      <div class="topbar-right">
+        <button class="btn-ghost" onclick="showInfo('how')" id="btnHowGame" style="font-size:14px; padding:4px 10px;">?</button>
+        <button class="btn-secondary" onclick="confirmRestart()" id="btnRestartGame" style="font-size:12px; padding:4px 12px;">Restart</button>
+      </div>
+    </div>
+    <div class="game-main">
+      <div class="side-panel x-panel">
+        <div class="panel-symbol">X</div>
+        <div class="panel-name" id="panelXName">Team X</div>
+        <div class="panel-meta" id="panelXMeta">4 players</div>
+      </div>
+      <div class="board-wrap">
+        <div id="board"></div>
+      </div>
+      <div class="side-panel o-panel">
+        <div class="panel-symbol">O</div>
+        <div class="panel-name" id="panelOName">Team O</div>
+        <div class="panel-meta" id="panelOMeta">4 players</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INFO PAGES (How / About) ===== -->
+  <div id="infoHow" class="info-page">
+    <h2 id="howTitle">📖 How to Play</h2>
+    <p id="howText">🎯 Two teams: X and O. Tap an empty square, answer a question. ✅ Correct → claim the square. ❌ Wrong → turn passes. First to get 5 in a row wins!</p>
+    <button class="menu-btn yellow" onclick="closeInfo()" id="howBackBtn">← Back</button>
+  </div>
+  <div id="infoAbout" class="info-page">
+    <h2 id="aboutTitle">ℹ️ About</h2>
+    <p id="aboutDesc"><strong>Mazaj</strong> ☕<br>A simple party game for friends.</p>
+    <p id="aboutDev"><strong>Developer:</strong> Tamim Aljabri</p>
+    <button class="menu-btn yellow" onclick="closeInfo()" id="aboutBackBtn">← Back</button>
+  </div>
+
+  <!-- ===== CATEGORY MODAL ===== -->
+  <div class="modal-overlay hidden" id="modalCategory">
+    <div class="modal-box">
+      <h2 id="catTitle">Choose a category</h2>
+      <p class="modal-sub" id="catSub">Pick one option below</p>
+      <div class="category-grid">
+        <button class="category-btn" onclick="chooseCategory('truth')">
+          <span class="cat-icon">💬</span><span id="catTruth">Truth</span>
+        </button>
+        <button class="category-btn" onclick="chooseCategory('riddle')">
+          <span class="cat-icon">🧩</span><span id="catRiddle">Riddle</span>
+        </button>
+        <button class="category-btn" onclick="chooseCategory('general')">
+          <span class="cat-icon">📚</span><span id="catGeneral">General</span>
+        </button>
+      </div>
+      <button class="btn-ghost" onclick="cancelCategory()" id="catCancel" style="margin-top:4px;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ===== QUESTION MODAL ===== -->
+  <div class="modal-overlay hidden" id="modalQuestion">
+    <div class="modal-box">
+      <h2 id="qTeamTitle">Team X</h2>
+      <div class="question-text" id="qText">Question...</div>
+      <div class="answer-reveal" id="qAnswer"></div>
+      <button class="btn-reveal hidden" id="btnReveal" onclick="revealAnswer()">Show answer</button>
+      <div class="modal-actions">
+        <button class="btn-correct" onclick="resolveAnswer(true)" id="btnCorrect">✓ Correct</button>
+        <button class="btn-wrong" onclick="resolveAnswer(false)" id="btnWrong">✗ Wrong</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT MODAL ===== -->
+  <div class="modal-overlay hidden" id="modalResult">
+    <div class="modal-box">
+      <div class="result-banner" id="resultBanner">Correct!</div>
+      <button class="btn-primary" onclick="closeResult()" id="resultContinue">Continue</button>
+    </div>
+  </div>
+
+  <!-- ===== WIN MODAL ===== -->
+  <div class="modal-overlay hidden" id="modalWin">
+    <div class="modal-box">
+      <div class="win-emoji">🏆</div>
+      <h2 id="winText">Team X wins!</h2>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="newRoundSameTeams()" id="btnPlayAgain">Play Again</button>
+        <button class="btn-secondary" onclick="goHome()" id="btnNewTeams">New Teams</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESTART CONFIRM ===== -->
+  <div class="modal-overlay hidden" id="modalRestart">
+    <div class="modal-box">
+      <h2 id="restartText">Restart the game?</h2>
+      <div class="modal-actions">
+        <button class="btn-wrong" onclick="doRestart()" id="restartYes">Yes</button>
+        <button class="btn-secondary" onclick="closeRestart()" id="restartNo">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   MAZAJ – Full Game with Main Menu, About, Fixed Lang, Turn Switch
+   ============================================================ */
+
+// ----- I18N -----
+const I18N = {
+  en: {
+    title:"Mazaj", tagline:"A fun team trivia board game",
+    teamx:"X Team", teamo:"O Team", nameLabel:"Team name", playersLabel:"Players",
+    startGame:"Start Game", back:"← Back", howTo:"How to Play", about:"About",
+    teamXDefault:"Team X", teamODefault:"Team O",
+    turnOf:(n)=>`${n}'s turn`,
+    chooseCat:(n)=>`${n}, choose a category`,
+    pickOne:"Pick one option",
+    truth:"Truth", riddle:"Riddle", general:"General",
+    cancel:"Cancel", showAnswer:"Show answer",
+    correct:"✓ Correct", wrong:"✗ Wrong",
+    resultCorrect:(n)=>`✅ ${n} answered correctly! Play again.`,
+    resultWrong:(n,next)=>`❌ Wrong. Turn moves to ${next}.`,
+    continue:"Continue",
+    win:(n)=>`${n} wins! 🎉`,
+    playAgain:"Play Again", newTeams:"New Teams",
+    rulesTitle:"How to Play Mazaj",
+    rules:`<ul><li>Two teams: X and O, 1–10 players each.</li><li>Tap any empty square.</li><li>Choose Truth, Riddle, or General.</li><li>Discuss the answer together.</li><li>Correct → claim the square and play again.</li><li>Wrong → turn passes to the other team.</li><li>First to line up <b>5 in a row</b> wins!</li></ul>`,
+    gotIt:"Got it",
+    restartConfirm:"Restart the game? Progress will be lost.",
+    yesRestart:"Yes, restart", cancelBtn:"Cancel",
+    players:(n)=> n===1 ? "1 player" : `${n} players`,
+    aboutDesc:"Mazaj ☕ A simple party game for friends.",
+    aboutDev:"Developer: Tamim Aljabri",
+    rotate:"Please rotate to landscape mode",
+    menu:"Menu", langMenu:"🌐 Language"
+  },
+  ar: {
+    title:"مزاج", tagline:"لعبة جماعية ممتعة",
+    teamx:"فريق X", teamo:"فريق O", nameLabel:"اسم الفريق", playersLabel:"اللاعبين",
+    startGame:"ابدأ", back:"← رجوع", howTo:"طريقة اللعب", about:"حول",
+    teamXDefault:"فريق X", teamODefault:"فريق O",
+    turnOf:(n)=>`دور ${n}`,
+    chooseCat:(n)=>`${n}، اختاروا نوع السؤال`,
+    pickOne:"اختاروا أحد الخيارات",
+    truth:"صراحة", riddle:"لغز", general:"ثقافي",
+    cancel:"إلغاء", showAnswer:"عرض الإجابة",
+    correct:"✓ صحيح", wrong:"✗ خطأ",
+    resultCorrect:(n)=>`✅ أجاب ${n} بشكل صحيح! العبوا مرة أخرى.`,
+    resultWrong:(n,next)=>`❌ إجابة خاطئة. الدور لـ ${next}.`,
+    continue:"متابعة",
+    win:(n)=>`${n} هو الفائز! 🎉`,
+    playAgain:"العب مرة أخرى", newTeams:"فرق جديدة",
+    rulesTitle:"طريقة لعب مزاج",
+    rules:`<ul><li>فريقان: X و O، من 1 إلى 10 لاعبين.</li><li>اضغط على مربع فارغ.</li><li>اختر: صراحة، لغز، أو ثقافي.</li><li>ناقشوا الإجابة معًا.</li><li>صحيح → احصل على المربع والعب مرة أخرى.</li><li>خطأ → ينتقل الدور للفريق الآخر.</li><li>أول فريق يكوّن <b>5 متتالية</b> يفوز!</li></ul>`,
+    gotIt:"فهمت",
+    restartConfirm:"إعادة بدء اللعبة؟ سيتم فقدان التقدم.",
+    yesRestart:"نعم، إعادة", cancelBtn:"إلغاء",
+    players:(n)=> `${n} ${n===1?"لاعب":"لاعبين"}`,
+    aboutDesc:"مزاج ☕ لعبة جماعية بسيطة للأصدقاء.",
+    aboutDev:"المطور: تميم الجابري",
+    rotate:"يرجى تدوير الجوال إلى الوضع الأفقي",
+    menu:"القائمة", langMenu:"🌐 اللغة"
+  }
+};
+
+// ----- State -----
+let lang = 'en';
+let state = {
+  board: [], // 10x10
+  currentTeam: 'X',
+  teamX: { name:'Team X', count:4 },
+  teamO: { name:'Team O', count:4 },
+  pendingCell: null, // {r,c}
+  pendingCategory: null,
+  gameOver: false
+};
+let currentQuestion = null;
+let pendingWin = false;
+let winnerTeam = null;
+
+// ----- Question Bank -----
+const QUESTIONS = {
+  en:{
+    truth:["What's an embarrassing moment for your team?","If you could switch lives with a celebrity for a day, who?","What's a hidden talent?","Funniest nickname?","First thing you'd buy with a lot of money?","Food your team hates?","Worst gift received?","Where would you travel?","Childhood fear?","Useless skill?","What business would you start?","Movie you all think is overrated?","Small lie told recently?","Theme song?","What would you never do on a dare?","Weirdest habit?","Which TV show would you live in?","A rumor someone believed?"],
+    riddle:[
+      {q:"I speak without a mouth and hear without ears. What am I?", a:"Echo"},
+      {q:"The more you take, the more you leave behind. What am I?", a:"Footsteps"},
+      {q:"What has keys but can't open locks?", a:"Piano"},
+      {q:"What has a head and a tail but no body?", a:"Coin"},
+      {q:"What gets wetter as it dries?", a:"Towel"},
+      {q:"I'm tall when young, short when old. What am I?", a:"Candle"},
+      {q:"What has hands but can't clap?", a:"Clock"},
+      {q:"What travels the world while staying in a corner?", a:"Stamp"},
+      {q:"What has many teeth but can't bite?", a:"Comb"},
+      {q:"What goes up but never comes down?", a:"Age"},
+      {q:"What has a neck but no head?", a:"Bottle"},
+      {q:"Which month has 28 days?", a:"All of them"},
+      {q:"What can you catch but not throw?", a:"Cold"},
+      {q:"What has one eye but can't see?", a:"Needle"},
+      {q:"What building has the most stories?", a:"Library"},
+      {q:"What has a bed but never sleeps?", a:"River"},
+      {q:"What room has no doors or windows?", a:"Mushroom"},
+      {q:"What must be broken before you use it?", a:"Egg"}
+    ],
+    general:[
+      {q:"Capital of France?", a:"Paris"},
+      {q:"How many continents?", a:"Seven"},
+      {q:"Largest planet?", a:"Jupiter"},
+      {q:"Who wrote Romeo and Juliet?", a:"Shakespeare"},
+      {q:"Chemical formula for water?", a:"H2O"},
+      {q:"Football players on field?", a:"Eleven"},
+      {q:"Fastest land animal?", a:"Cheetah"},
+      {q:"Largest ocean?", a:"Pacific"},
+      {q:"Great Pyramid location?", a:"Egypt"},
+      {q:"Smallest prime number?", a:"Two"},
+      {q:"Colors in a rainbow?", a:"Seven"},
+      {q:"Currency of Japan?", a:"Yen"},
+      {q:"Gas plants absorb?", a:"Carbon dioxide"},
+      {q:"Who painted the Mona Lisa?", a:"Leonardo da Vinci"},
+      {q:"Tallest mountain?", a:"Everest"},
+      {q:"Bones in adult body?", a:"206"},
+      {q:"Longest river?", a:"Nile"},
+      {q:"National sport of Japan?", a:"Sumo"}
+    ]
+  },
+  ar:{
+    truth:["موقف محرج لأحد الفريق؟","لو تبدلتم مع مشهور ليوم؟","موهبة خفية؟","ألطف لقب؟","أول شيء تشترونه بمال كثير؟","أكل يكرهه الفريق؟","أسوأ هدية؟","أين تسافرون؟","خوف من الطفولة؟","مهارة عديمة الفائدة؟","مشروع تفتحونه؟","فيلم مبالغ في تقييمه؟","أصغر كذبة؟","أغنية مميزة؟","شيء لن تفعلوه أبدًا؟","أغرب عادة؟","أي مسلسل تعيشون فيه؟","شائعة صدقتموها؟"],
+    riddle:[
+      {q:"أتكلّم بدون فم وأسمع بدون أذن؟", a:"الصدى"},
+      {q:"كلما أخذت أكثر تركت أكثر خلفك؟", a:"آثار الأقدام"},
+      {q:"لدي مفاتيح لكن لا أفتح أقفالاً؟", a:"البيانو"},
+      {q:"لدي رأس وذيل لكن بدون جسم؟", a:"العملة"},
+      {q:"كلما جفّ صار أكثر ابتلالاً؟", a:"المنشفة"},
+      {q:"طويل حين صغير وقصير حين كبير؟", a:"الشمعة"},
+      {q:"لدي عقارب لكن لا تصفق؟", a:"الساعة"},
+      {q:"أسافر العالم وأنا في زاوية؟", a:"الطابع"},
+      {q:"لدي أسنان كثيرة لكن لا أعض؟", a:"المشط"},
+      {q:"يرتفع باستمرار لكن لا ينزل؟", a:"العمر"},
+      {q:"لدي عنق لكن بدون رأس؟", a:"الزجاجة"},
+      {q:"أي شهر فيه 28 يومًا؟", a:"كل الشهور"},
+      {q:"شيء قد تصاب به لكن لا ترميه؟", a:"البرد"},
+      {q:"لدي عين لكن لا أرى؟", a:"الإبرة"},
+      {q:"أي مبنى فيه أكبر عدد من القصص؟", a:"المكتبة"},
+      {q:"لدي سرير لكن لا أنام؟", a:"النهر"},
+      {q:"غرفة بدون أبواب ولا نوافذ؟", a:"الفطر"},
+      {q:"شيء يُكسر قبل استخدامه؟", a:"البيضة"}
+    ],
+    general:[
+      {q:"عاصمة فرنسا؟", a:"باريس"},
+      {q:"عدد قارات العالم؟", a:"سبع"},
+      {q:"أكبر كوكب؟", a:"المشتري"},
+      {q:"كاتب روميو وجولييت؟", a:"شكسبير"},
+      {q:"صيغة الماء؟", a:"H2O"},
+      {q:"لاعبي كرة القدم في الملعب؟", a:"أحد عشر"},
+      {q:"أسرع حيوان بري؟", a:"الفهد"},
+      {q:"أكبر محيط؟", a:"الهادئ"},
+      {q:"موقع هرم الجيزة؟", a:"مصر"},
+      {q:"أصغر عدد أولي؟", a:"اثنان"},
+      {q:"ألوان قوس قزح؟", a:"سبعة"},
+      {q:"عملة اليابان؟", a:"الين"},
+      {q:"غاز تمتصه النباتات؟", a:"ثاني أكسيد الكربون"},
+      {q:"رسام الموناليزا؟", a:"دافنشي"},
+      {q:"أعلى جبل؟", a:"إيفرست"},
+      {q:"عظام جسم الإنسان البالغ؟", a:"206"},
+      {q:"أطول نهر؟", a:"النيل"},
+      {q:"الرياضة الوطنية في اليابان؟", a:"السومو"}
+    ]
+  }
+};
+
+// ----- Helpers -----
+function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+let bags = { en:{truth:[],riddle:[],general:[]}, ar:{truth:[],riddle:[],general:[]} };
+function refillBag(l,cat){ bags[l][cat] = shuffle(QUESTIONS[l][cat].map((_,i)=>i)); }
+function drawQuestion(cat){
+  if(bags[lang][cat].length===0) refillBag(lang,cat);
+  const idx = bags[lang][cat].pop();
+  return QUESTIONS[lang][cat][idx];
+}
+
+// ----- Translation -----
+function t(key, ...args){
+  const dict = I18N[lang];
+  if(typeof dict[key]==='function') return dict[key](...args);
+  return dict[key] || key;
+}
+
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l==='ar'?'rtl':'ltr';
+  document.getElementById('btnLangEn').classList.toggle('active', l==='en');
+  document.getElementById('btnLangAr').classList.toggle('active', l==='ar');
+  applyTexts();
+}
+
+function applyTexts(){
+  document.getElementById('menuTitle').textContent = t('title');
+  document.getElementById('menuTagline').textContent = t('tagline');
+  document.getElementById('btnPlay').textContent = '▶ '+t('startGame');
+  document.getElementById('btnHow').textContent = '📖 '+t('howTo');
+  document.getElementById('btnAbout').textContent = 'ℹ️ '+t('about');
+  document.getElementById('btnLangMenu').textContent = t('langMenu');
+
+  document.getElementById('setupTitle').textContent = t('startGame');
+  document.getElementById('teamXLabel').textContent = t('teamx');
+  document.getElementById('teamOLabel').textContent = t('teamo');
+  document.getElementById('nameLabelX').textContent = t('nameLabel');
+  document.getElementById('nameLabelO').textContent = t('nameLabel');
+  document.getElementById('playersLabelX').textContent = t('playersLabel');
+  document.getElementById('playersLabelO').textContent = t('playersLabel');
+  document.getElementById('btnStartGame').textContent = t('startGame');
+  document.getElementById('btnBackMenu').textContent = t('back');
+
+  const ix = document.getElementById('inputXName');
+  const io = document.getElementById('inputOName');
+  if(!ix.dataset.touched) ix.value = t('teamXDefault');
+  if(!io.dataset.touched) io.value = t('teamODefault');
+  ix.placeholder = t('teamXDefault');
+  io.placeholder = t('teamODefault');
+
+  document.getElementById('gameTitle').textContent = t('title');
+  document.getElementById('btnHowGame').textContent = '?';
+  document.getElementById('btnRestartGame').textContent = lang==='ar'?'إعادة':'Restart';
+
+  document.getElementById('catTruth').textContent = t('truth');
+  document.getElementById('catRiddle').textContent = t('riddle');
+  document.getElementById('catGeneral').textContent = t('general');
+  document.getElementById('catCancel').textContent = t('cancel');
+  document.getElementById('catSub').textContent = t('pickOne');
+
+  document.getElementById('btnReveal').textContent = t('showAnswer');
+  document.getElementById('btnCorrect').textContent = t('correct');
+  document.getElementById('btnWrong').textContent = t('wrong');
+  document.getElementById('resultContinue').textContent = t('continue');
+  document.getElementById('btnPlayAgain').textContent = t('playAgain');
+  document.getElementById('btnNewTeams').textContent = t('newTeams');
+
+  document.getElementById('howTitle').textContent = t('rulesTitle');
+  document.getElementById('howText').innerHTML = t('rules');
+  document.getElementById('howBackBtn').textContent = t('back');
+  document.getElementById('aboutTitle').textContent = t('about');
+  document.getElementById('aboutDesc').innerHTML = t('aboutDesc');
+  document.getElementById('aboutDev').innerHTML = '<strong>'+t('aboutDev')+'</strong>';
+  document.getElementById('aboutBackBtn').textContent = t('back');
+
+  document.getElementById('restartText').textContent = t('restartConfirm');
+  document.getElementById('restartYes').textContent = t('yesRestart');
+  document.getElementById('restartNo').textContent = t('cancelBtn');
+  document.getElementById('rotateText').textContent = t('rotate');
+
+  updateSidePanels();
+  updateTurnPill();
+}
+
+// ----- Navigation -----
+function showScreen(id){ document.querySelectorAll('.screen, .info-page').forEach(el=>el.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+function showMenu(){ showScreen('menu-screen'); }
+function showSetup(){ showScreen('setup-screen'); }
+function showInfo(page){
+  document.querySelectorAll('.screen, .info-page').forEach(el=>el.classList.add('hidden'));
+  document.getElementById(page==='how'?'infoHow':'infoAbout').classList.add('active');
+}
+function closeInfo(){ showMenu(); }
+
+function toggleLangFromMenu(){
+  const newLang = lang==='en'?'ar':'en';
+  setLang(newLang);
+}
+
+// ----- Setup -> Game -----
+function startGame(){
+  const t = I18N[lang];
+  const xName = document.getElementById('inputXName').value.trim() || t.teamXDefault;
+  const oName = document.getElementById('inputOName').value.trim() || t.teamODefault;
+  const xCount = parseInt(document.getElementById('selectXCount').value,10);
+  const oCount = parseInt(document.getElementById('selectOCount').value,10);
+
+  state.teamX = { name:xName, count:xCount };
+  state.teamO = { name:oName, count:oCount };
+  state.currentTeam = 'X';
+  state.gameOver = false;
+  state.board = Array.from({length:10}, ()=>Array(10).fill(null));
+
+  buildBoard();
+  updateSidePanels();
+  updateTurnPill();
+
+  showScreen('game-screen');
+}
+
+function goHome(){
+  document.getElementById('modalWin').classList.add('hidden');
+  showMenu();
+}
+
+function newRoundSameTeams(){
+  state.currentTeam = 'X';
+  state.gameOver = false;
+  state.board = Array.from({length:10}, ()=>Array(10).fill(null));
+  buildBoard();
+  updateTurnPill();
+  document.getElementById('modalWin').classList.add('hidden');
+}
+
+// ----- Board -----
+function buildBoard(){
+  const boardEl = document.getElementById('board');
+  boardEl.innerHTML = '';
+  for(let r=0;r<10;r++){
+    for(let c=0;c<10;c++){
+      const cell = document.createElement('button');
+      cell.className = 'cell';
+      cell.id = `cell-${r}-${c}`;
+      cell.onclick = ()=> onCellTap(r,c);
+      boardEl.appendChild(cell);
+    }
+  }
+}
+
+function onCellTap(r,c){
+  if(state.gameOver) return;
+  if(state.board[r][c]) return;
+  state.pendingCell = {r,c};
+  openCategoryModal();
+}
+
+function renderCell(r,c){
+  const val = state.board[r][c];
+  const el = document.getElementById(`cell-${r}-${c}`);
+  if(!el) return;
+  el.textContent = val;
+  el.classList.add('filled', val==='X'?'filled-x':'filled-o');
+}
+
+function updateSidePanels(){
+  document.getElementById('panelXName').textContent = state.teamX.name;
+  document.getElementById('panelOName').textContent = state.teamO.name;
+  document.getElementById('panelXMeta').textContent = t('players', state.teamX.count);
+  document.getElementById('panelOMeta').textContent = t('players', state.teamO.count);
+}
+
+function updateTurnPill(){
+  const pill = document.getElementById('turnPill');
+  const name = state.currentTeam==='X' ? state.teamX.name : state.teamO.name;
+  pill.textContent = t('turnOf', name);
+  pill.classList.remove('turn-x','turn-o');
+  pill.classList.add(state.currentTeam==='X'?'turn-x':'turn-o');
+}
+
+// ----- Category Modal -----
+function openCategoryModal(){
+  const name = state.currentTeam==='X' ? state.teamX.name : state.teamO.name;
+  document.getElementById('catTitle').textContent = t('chooseCat', name);
+  document.getElementById('modalCategory').classList.remove('hidden');
+}
+function cancelCategory(){
+  state.pendingCell = null;
+  document.getElementById('modalCategory').classList.add('hidden');
+}
+function chooseCategory(cat){
+  state.pendingCategory = cat;
+  document.getElementById('modalCategory').classList.add('hidden');
+  openQuestionModal(cat);
+}
+
+// ----- Question Modal -----
+function openQuestionModal(cat){
+  const name = state.currentTeam==='X' ? state.teamX.name : state.teamO.name;
+  document.getElementById('qTeamTitle').textContent = name;
+  document.getElementById('qAnswer').textContent = '';
+
+  const revealBtn = document.getElementById('btnReveal');
+  if(cat==='truth'){
+    currentQuestion = { q: drawQuestion('truth'), a: null };
+    revealBtn.classList.add('hidden');
+  } else {
+    currentQuestion = drawQuestion(cat);
+    revealBtn.classList.remove('hidden');
+  }
+  document.getElementById('qText').textContent = currentQuestion.q;
+  document.getElementById('modalQuestion').classList.remove('hidden');
+}
+
+function revealAnswer(){
+  if(currentQuestion && currentQuestion.a){
+    document.getElementById('qAnswer').textContent = (lang==='ar'?'الإجابة: ':'Answer: ')+currentQuestion.a;
+  }
+}
+
+function resolveAnswer(isCorrect){
+  document.getElementById('modalQuestion').classList.add('hidden');
+  const {r,c} = state.pendingCell;
+  const teamKey = state.currentTeam;
+  const teamObj = teamKey==='X' ? state.teamX : state.teamO;
+  const nextTeam = teamKey==='X' ? state.teamO : state.teamX;
+
+  const banner = document.getElementById('resultBanner');
+  if(isCorrect){
+    state.board[r][c] = teamKey;
+    renderCell(r,c);
+    banner.className = 'result-banner ok';
+    banner.textContent = t('resultCorrect', teamObj.name);
+    const win = checkWin(r,c,teamKey);
+    if(win){
+      state.gameOver = true;
+      pendingWin = true;
+      winnerTeam = teamKey;
+    } else {
+      // ALWAYS switch turn after a completed turn (even if correct)
+      state.currentTeam = teamKey==='X' ? 'O' : 'X';
+    }
+  } else {
+    banner.className = 'result-banner fail';
+    banner.textContent = t('resultWrong', teamObj.name, nextTeam.name);
+    state.currentTeam = teamKey==='X' ? 'O' : 'X';
+  }
+  state.pendingCell = null;
+  document.getElementById('modalResult').classList.remove('hidden');
+}
+
+function closeResult(){
+  document.getElementById('modalResult').classList.add('hidden');
+  if(pendingWin){
+    pendingWin = false;
+    showWin(winnerTeam);
+  } else {
+    updateTurnPill();
+  }
+}
+
+// ----- Win Check -----
+function checkWin(r,c,team){
+  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
+  for(const [dr,dc] of dirs){
+    let cells = [[r,c]];
+    let rr=r+dr, cc=c+dc;
+    while(rr>=0&&rr<10&&cc>=0&&cc<10&&state.board[rr][cc]===team){
+      cells.push([rr,cc]); rr+=dr; cc+=dc;
+    }
+    rr=r-dr; cc=c-dc;
+    while(rr>=0&&rr<10&&cc>=0&&cc<10&&state.board[rr][cc]===team){
+      cells.push([rr,cc]); rr-=dr; cc-=dc;
+    }
+    if(cells.length>=5){
+      cells.forEach(([R,C])=>{
+        const el = document.getElementById(`cell-${R}-${C}`);
+        if(el) el.classList.add('win-cell');
+      });
+      return true;
+    }
+  }
+  return false;
+}
+
+function showWin(teamKey){
+  const name = teamKey==='X' ? state.teamX.name : state.teamO.name;
+  document.getElementById('winText').textContent = t('win', name);
+  document.getElementById('modalWin').classList.remove('hidden');
+}
+
+// ----- Restart -----
+function confirmRestart(){ document.getElementById('modalRestart').classList.remove('hidden'); }
+function closeRestart(){ document.getElementById('modalRestart').classList.add('hidden'); }
+function doRestart(){
+  closeRestart();
+  newRoundSameTeams();
+}
+
+// ----- Init player selects -----
+function fillSelects(){
+  ['selectXCount','selectOCount'].forEach(id=>{
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    for(let i=1;i<=10;i++){
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = i;
+      if(i===4) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+// ----- Input touch tracking -----
+document.getElementById('inputXName').addEventListener('input', e=>{ e.target.dataset.touched='1'; });
+document.getElementById('inputOName').addEventListener('input', e=>{ e.target.dataset.touched='1'; });
+
+// ----- Start -----
+fillSelects();
+setLang('en');
+showMenu();
+</script>
+</body>
+</html>
