@@ -144,12 +144,27 @@
   }
   .cell{
     background:#fff; border:none; display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:clamp(10px,2.2vw,18px); padding:0; aspect-ratio:1/1;
+    font-weight:700; font-size:clamp(10px,2.2vw,18px); padding:0; aspect-ratio:1/1;
+    color:#555;
+    position:relative;
+  }
+  .cell .cell-number{
+    font-size:clamp(8px,1.4vw,14px);
+    font-weight:600;
+    color:#999;
+    position:absolute;
+    top:2px;
+    left:4px;
+    pointer-events:none;
   }
   .cell:not(.filled):active{ background:#ededed; }
   .cell.filled-x{ background:#161616; color:#fff; }
+  .cell.filled-x .cell-number{ color:rgba(255,255,255,0.4); }
   .cell.filled-o{ background:#ffc72c; color:#161616; }
+  .cell.filled-o .cell-number{ color:rgba(0,0,0,0.3); }
   .cell.win-cell{ outline:3px solid #d8433b; outline-offset:-3px; }
+  .cell.filled-x.win-cell .cell-number{ color:rgba(255,255,255,0.6); }
+  .cell.filled-o.win-cell .cell-number{ color:rgba(0,0,0,0.5); }
 
   /* ===== PAUSE MENU ===== */
   .pause-overlay{
@@ -221,7 +236,7 @@
   .rules-text{ text-align:start; font-size:13.5px; line-height:1.7; }
   .rules-text ul{ margin:4px 0; padding-inline-start:20px; }
 
-  /* ===== INFO PAGES - FIXED ===== */
+  /* ===== INFO PAGES ===== */
   .info-page{ 
     display:none; 
     flex-direction:column; 
@@ -287,6 +302,7 @@
   html[dir="rtl"] .topbar-right{ flex-direction:row-reverse; }
   html[dir="rtl"] .game-main{ flex-direction:row-reverse; }
   html[dir="rtl"] .side-panel{ text-align:right; }
+  html[dir="rtl"] .cell .cell-number{ right:4px; left:auto; }
 </style>
 </head>
 <body>
@@ -415,7 +431,7 @@
     </div>
   </div>
 
-  <!-- ===== INFO PAGES - FIXED ===== -->
+  <!-- ===== INFO PAGES ===== -->
   <div id="infoHow" class="info-page">
     <h2 id="howTitle">📖 How to Play</h2>
     <p id="howText">🎯 Two teams: X and O. Tap an empty square, answer a question. ✅ Correct → claim the square. ❌ Wrong → turn passes. First to get 5 in a row wins!</p>
@@ -497,7 +513,7 @@
 
 <script>
 /* ============================================================
-   MAZAJ – Fixed Info Pages (How to Play & About)
+   MAZAJ – Numbered Squares (1,2,3... across the board)
    ============================================================ */
 
 // ----- I18N -----
@@ -701,12 +717,10 @@ function updatePauseTexts(){
 
 // ----- Navigation -----
 function showScreen(id){ 
-  // Hide all screens and info pages
   document.querySelectorAll('.screen, .info-page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.screen, .info-page').forEach(el=>el.style.display = 'none');
   document.getElementById('game-screen').classList.add('hidden');
   
-  // Show the requested screen
   const el = document.getElementById(id);
   if(el) {
     el.style.display = 'flex';
@@ -732,20 +746,17 @@ function showSetup(){
 }
 
 function showInfo(page){
-  // Hide all screens
   document.querySelectorAll('.screen').forEach(el=>{
     el.style.display = 'none';
     el.classList.add('hidden');
   });
   document.getElementById('game-screen').classList.add('hidden');
   
-  // Hide all info pages first
   document.querySelectorAll('.info-page').forEach(el=>{
     el.classList.remove('active');
     el.style.display = 'none';
   });
   
-  // Show the selected info page
   const target = document.getElementById(page==='how'?'infoHow':'infoAbout');
   if(target) {
     target.style.display = 'flex';
@@ -759,7 +770,6 @@ function closeInfo(){
     el.style.display = 'none';
   });
   
-  // Check if game is active
   if(!document.getElementById('game-screen').classList.contains('hidden')){
     document.getElementById('game-screen').style.display = 'flex';
     document.getElementById('game-screen').classList.remove('hidden');
@@ -826,7 +836,6 @@ function startGame(){
   updateSidePanels();
   updateTurnPill();
 
-  // Hide all screens and info pages
   document.querySelectorAll('.screen, .info-page').forEach(el=>{
     el.style.display = 'none';
     el.classList.remove('active');
@@ -851,36 +860,41 @@ function newRoundSameTeams(){
   document.getElementById('pauseOverlay').classList.remove('active');
 }
 
-// ----- Board -----
+// ----- Board with numbered squares -----
 function buildBoard(){
   const boardEl = document.getElementById('board');
   boardEl.innerHTML = '';
   boardEl.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
   boardEl.style.gridTemplateRows = `repeat(${boardSize}, 1fr)`;
+  
+  let squareNumber = 1;
   for(let r=0;r<boardSize;r++){
     for(let c=0;c<boardSize;c++){
       const cell = document.createElement('button');
       cell.className = 'cell';
       cell.id = `cell-${r}-${c}`;
+      
+      // Add number label
+      const numberSpan = document.createElement('span');
+      numberSpan.className = 'cell-number';
+      numberSpan.textContent = squareNumber++;
+      cell.appendChild(numberSpan);
+      
       cell.onclick = ()=> onCellTap(r,c);
       boardEl.appendChild(cell);
     }
   }
 }
 
-function onCellTap(r,c){
-  if(state.gameOver) return;
-  if(state.board[r][c]) return;
-  state.pendingCell = {r,c};
-  openCategoryModal();
-}
-
 function renderCell(r,c){
   const val = state.board[r][c];
   const el = document.getElementById(`cell-${r}-${c}`);
   if(!el) return;
-  el.textContent = val;
-  el.classList.add('filled', val==='X'?'filled-x':'filled-o');
+  // The number is already in the cell as a child
+  if(val){
+    el.textContent = val;
+    el.classList.add('filled', val==='X'?'filled-x':'filled-o');
+  }
 }
 
 function updateSidePanels(){
