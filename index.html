@@ -165,8 +165,6 @@
   .cell.filled-o{ background:#ffc72c; color:#161616; cursor:default; }
   .cell.filled-o .cell-number{ color:rgba(0,0,0,0.3); }
   .cell.win-cell{ outline:3px solid #d8433b; outline-offset:-3px; }
-  .cell.filled-x.win-cell .cell-number{ color:rgba(255,255,255,0.6); }
-  .cell.filled-o.win-cell .cell-number{ color:rgba(0,0,0,0.5); }
   .cell .cell-symbol{
     font-weight:800;
     font-size:clamp(14px,3vw,28px);
@@ -204,27 +202,39 @@
   }
   .modal-box{
     background:#fff; border-radius:20px; border:3px solid #161616;
-    max-width:480px; width:100%; max-height:90vh; overflow-y:auto;
+    max-width:520px; width:100%; max-height:90vh; overflow-y:auto;
     padding:18px 20px; text-align:center; display:flex; flex-direction:column; gap:10px;
   }
   .modal-box h2{ margin:0; font-size:18px; font-weight:800; }
   .modal-sub{ font-size:12px; color:#666; font-weight:700; margin:0; }
 
-  .category-grid{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:4px 0; }
+  .category-grid{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:4px 0; max-height:400px; overflow-y:auto; }
   .category-btn{
-    flex:1; min-width:110px; border:3px solid #161616; background:#fff; border-radius:14px;
-    padding:14px 6px; font-weight:800; font-size:13px; display:flex; flex-direction:column; align-items:center; gap:4px;
+    flex:1; min-width:120px; max-width:200px;
+    border:3px solid #161616; background:#fff; border-radius:14px;
+    padding:12px 8px; font-weight:800; font-size:13px; display:flex; flex-direction:column; align-items:center; gap:4px;
   }
   .category-btn:active{ background:#ffc72c; }
-  .category-btn .cat-icon{ font-size:22px; }
+  .category-btn .cat-label{ font-size:12px; font-weight:700; }
 
   .question-text{
     font-size:17px; font-weight:700; line-height:1.5; padding:14px 10px;
     background:#ededed; border-radius:12px; min-height:60px;
     display:flex; align-items:center; justify-content:center;
+    word-wrap:break-word;
   }
-  .answer-reveal{ font-size:14px; font-weight:800; color:#3c9a5f; min-height:20px; }
+  .timer-display{
+    font-size:28px; font-weight:800; padding:8px; background:#161616; color:#ffc72c;
+    border-radius:12px; font-family:monospace; letter-spacing:2px;
+  }
+  .timer-label{ font-size:14px; font-weight:700; color:#555; }
+  .answer-reveal{ font-size:16px; font-weight:800; color:#3c9a5f; min-height:30px; padding:8px; background:#e4f5ea; border-radius:8px; word-wrap:break-word; }
   .modal-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .btn-reveal{
+    background:#ffc72c; border:3px solid #161616; border-radius:40px;
+    font-weight:800; font-size:16px; padding:10px 24px; box-shadow:0 4px 0 #e6ad00;
+  }
+  .btn-reveal:active{ transform:translateY(3px); box-shadow:0 1px 0 #e6ad00; }
   .btn-correct{
     background:#3c9a5f; color:#fff; border:3px solid #161616; border-radius:40px;
     font-weight:800; font-size:14px; padding:10px 22px;
@@ -233,16 +243,40 @@
     background:#d8433b; color:#fff; border:3px solid #161616; border-radius:40px;
     font-weight:800; font-size:14px; padding:10px 22px;
   }
-  .btn-reveal{
-    background:#fff; border:2px solid #161616; border-radius:40px;
-    font-weight:800; font-size:13px; padding:8px 20px;
-  }
   .result-banner{ font-weight:800; font-size:15px; padding:10px; border-radius:12px; }
   .result-banner.ok{ background:#e4f5ea; color:#3c9a5f; }
   .result-banner.fail{ background:#fbeaea; color:#d8433b; }
+  .result-banner.info{ background:#e3f0ff; color:#1a5a8c; }
   .win-emoji{ font-size:44px; }
   .rules-text{ text-align:start; font-size:13.5px; line-height:1.7; }
   .rules-text ul{ margin:4px 0; padding-inline-start:20px; }
+
+  .who-answered-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .who-btn{
+    flex:1; min-width:100px; border:3px solid #161616; border-radius:14px;
+    padding:14px 8px; font-weight:800; font-size:16px; background:#fff;
+  }
+  .who-btn:active{ background:#ffc72c; }
+  .who-btn.yellow{ background:#ffc72c; }
+  .extra-choice-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .extra-btn{
+    flex:1; min-width:120px; border:3px solid #161616; border-radius:14px;
+    padding:14px 8px; font-weight:800; font-size:14px; background:#fff;
+  }
+  .extra-btn:active{ background:#ffc72c; }
+
+  /* Visual Poster Styles */
+  .poster-container{
+    width:100%; max-width:400px; margin:8px auto; border:3px solid #161616; border-radius:12px;
+    overflow:hidden; background:#f5f5f5; display:flex; align-items:center; justify-content:center;
+    aspect-ratio:16/9; position:relative;
+  }
+  .poster-container svg{ width:100%; height:100%; display:block; }
+  .poster-container .poster-label{
+    position:absolute; bottom:8px; right:12px; background:rgba(0,0,0,0.7); color:#fff;
+    padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700;
+  }
+  html[dir="rtl"] .poster-container .poster-label{ right:auto; left:12px; }
 
   /* ===== INFO PAGES ===== */
   .info-page{ 
@@ -311,6 +345,9 @@
   html[dir="rtl"] .game-main{ flex-direction:row-reverse; }
   html[dir="rtl"] .side-panel{ text-align:right; }
   html[dir="rtl"] .cell .cell-number{ right:4px; left:auto; }
+  html[dir="rtl"] .question-text{ text-align:right; }
+  html[dir="rtl"] .answer-reveal{ text-align:right; }
+  html[dir="rtl"] .timer-label{ text-align:right; }
 </style>
 </head>
 <body>
@@ -378,14 +415,9 @@
     <div class="win-length-selector">
       <label id="winLengthLabel">Win length (3-10):</label>
       <select id="winLengthSelect">
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5" selected>5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
+        <option value="3">3</option><option value="4">4</option><option value="5" selected>5</option>
+        <option value="6">6</option><option value="7">7</option><option value="8">8</option>
+        <option value="9">9</option><option value="10">10</option>
       </select>
     </div>
     <button class="btn-primary" id="btnStartGame" onclick="startGame()">Start Game</button>
@@ -457,17 +489,7 @@
     <div class="modal-box">
       <h2 id="catTitle">Choose a category</h2>
       <p class="modal-sub" id="catSub">Pick one option below</p>
-      <div class="category-grid">
-        <button class="category-btn" onclick="chooseCategory('truth')">
-          <span class="cat-icon">T</span><span id="catTruth">Truth</span>
-        </button>
-        <button class="category-btn" onclick="chooseCategory('riddle')">
-          <span class="cat-icon">R</span><span id="catRiddle">Riddle</span>
-        </button>
-        <button class="category-btn" onclick="chooseCategory('general')">
-          <span class="cat-icon">G</span><span id="catGeneral">General</span>
-        </button>
-      </div>
+      <div class="category-grid" id="categoryGrid"></div>
       <button class="btn-ghost" onclick="cancelCategory()" id="catCancel" style="margin-top:4px;">Cancel</button>
     </div>
   </div>
@@ -476,12 +498,30 @@
   <div class="modal-overlay hidden" id="modalQuestion">
     <div class="modal-box">
       <h2 id="qTeamTitle">Team X</h2>
+      <div class="timer-label" id="timerLabel">Time remaining</div>
+      <div class="timer-display" id="timerDisplay">60</div>
+      <div id="posterContainer" class="poster-container hidden"></div>
       <div class="question-text" id="qText">Question...</div>
-      <div class="answer-reveal" id="qAnswer"></div>
-      <button class="btn-reveal hidden" id="btnReveal" onclick="revealAnswer()">Show answer</button>
-      <div class="modal-actions">
-        <button class="btn-correct" onclick="resolveAnswer(true)" id="btnCorrect">Correct</button>
-        <button class="btn-wrong" onclick="resolveAnswer(false)" id="btnWrong">Wrong</button>
+      <div id="answerContainer" class="hidden">
+        <div class="answer-reveal" id="qAnswer">Answer:</div>
+      </div>
+      <div id="showAnswerArea">
+        <button class="btn-reveal" onclick="showAnswer()" id="showAnswerBtn">Show Answer</button>
+      </div>
+      <div id="whoAnsweredArea" class="hidden">
+        <p style="font-weight:700; margin:4px 0;" id="whoAnsweredLabel">Who answered?</p>
+        <div class="modal-actions">
+          <button class="who-btn yellow" onclick="whoAnswered('team1')" id="whoTeam1">Team 1</button>
+          <button class="who-btn" onclick="whoAnswered('team2')" id="whoTeam2">Team 2</button>
+          <button class="who-btn" onclick="whoAnswered('nobody')" id="whoNobody">Nobody</button>
+        </div>
+      </div>
+      <div id="extraChoiceArea" class="hidden">
+        <p style="font-weight:700; margin:4px 0;" id="extraChoiceLabel">Choose what happens:</p>
+        <div class="extra-choice-grid">
+          <button class="extra-btn yellow" onclick="extraChoice('claim')" id="extraClaim">Claim square</button>
+          <button class="extra-btn" onclick="extraChoice('extraturns')" id="extraTurns">Get 2 extra turns</button>
+        </div>
       </div>
     </div>
   </div>
@@ -521,11 +561,11 @@
 
 <script>
 /* ============================================================
-   MAZAJ – No Emojis, Fixed Board Click System
+   MAZAJ – Complete Bilingual Database with Posters
    ============================================================ */
 
-// ----- I18N -----
-const I18N = {
+// ----- I18N UI Strings -----
+const UI_STRINGS = {
   en: {
     title:"Mazaj", tagline:"A fun team trivia board game",
     teamx:"X Team", teamo:"O Team", nameLabel:"Team name", playersLabel:"Players",
@@ -534,32 +574,43 @@ const I18N = {
     turnOf:(n)=>`${n}'s turn`,
     chooseCat:(n)=>`${n}, choose a category`,
     pickOne:"Pick one option",
-    truth:"Truth", riddle:"Riddle", general:"General",
-    cancel:"Cancel", showAnswer:"Show answer",
-    correct:"Correct", wrong:"Wrong",
-    resultCorrect:(n)=>`${n} answered correctly! Play again.`,
-    resultWrong:(n,next)=>`Wrong. Turn moves to ${next}.`,
+    cancel:"Cancel", showAnswer:"Show Answer",
     continue:"Continue",
     win:(n)=>`${n} wins!`,
     playAgain:"Play Again", newTeams:"New Teams",
     rulesTitle:"How to Play Mazaj",
-    rules:`<ul><li>Two teams: X and O, 1-10 players each.</li><li>Tap any empty square.</li><li>Choose Truth, Riddle, or General.</li><li>Discuss the answer together.</li><li>Correct claim the square and play again.</li><li>Wrong turn passes to the other team.</li><li>First to line up <b>5 in a row</b> wins!</li></ul>`,
-    gotIt:"Got it",
+    rules:`<ul><li>Two teams: X and O, 1-10 players each.</li><li>Tap any empty square.</li><li>Choose a category and answer the question.</li><li>If the selecting team answers, they claim the square.</li><li>If the other team answers, they can claim the square or get 2 extra turns.</li><li>If nobody answers, turn passes.</li><li>First to line up the required number in a row wins!</li></ul>`,
     restartConfirm:"Restart the game? Progress will be lost.",
     yesRestart:"Yes, restart", cancelBtn:"Cancel",
     players:(n)=> n===1 ? "1 player" : `${n} players`,
     aboutDesc:"Mazaj A simple party game for friends.",
     aboutDev:"Developer: Tamim Aljabri",
     rotate:"Please rotate to landscape mode",
-    menu:"Menu", langMenu:"Language",
+    langMenu:"Language",
     winLength:"Win length (3-10):",
-    exit:"Exit",
     pause:"Paused",
     resume:"Resume",
     restartGame:"Restart Game",
     changeLang:"Change Language",
     howToPlay:"How to Play",
-    exitMenu:"Exit to Main Menu"
+    exitMenu:"Exit to Main Menu",
+    whoAnswered:"Who answered?",
+    team1:"Team 1",
+    team2:"Team 2",
+    nobody:"Nobody",
+    extraChoice:"Choose what happens:",
+    claimSquare:"Claim square",
+    extraTurns:"Get 2 extra turns",
+    timerLabel:"Time remaining",
+    answering:(n)=>`${n} is answering`,
+    answerLabel:"Answer:",
+    categoryLabels: {
+      riddle:"Riddles", general:"General Knowledge", football:"Football", 
+      videogames:"Video Games", music:"Music", movies:"Movies", tvshows:"TV Shows",
+      geography:"Geography", science:"Science", animals:"Animals", history:"History",
+      technology:"Technology", food:"Food", brands:"Brands", cars:"Cars",
+      sports:"Sports", famouspeople:"Famous People"
+    }
   },
   ar: {
     title:"مزاج", tagline:"لعبة جماعية ممتعة",
@@ -567,38 +618,599 @@ const I18N = {
     startGame:"ابدأ", back:"رجوع", howTo:"طريقة اللعب", about:"حول",
     teamXDefault:"فريق X", teamODefault:"فريق O",
     turnOf:(n)=>`دور ${n}`,
-    chooseCat:(n)=>`${n}، اختاروا نوع السؤال`,
+    chooseCat:(n)=>`${n}، اختاروا فئة`,
     pickOne:"اختاروا أحد الخيارات",
-    truth:"صراحة", riddle:"لغز", general:"ثقافي",
     cancel:"إلغاء", showAnswer:"عرض الإجابة",
-    correct:"صحيح", wrong:"خطأ",
-    resultCorrect:(n)=>`أجاب ${n} بشكل صحيح! العبوا مرة أخرى.`,
-    resultWrong:(n,next)=>`إجابة خاطئة. الدور لـ ${next}.`,
     continue:"متابعة",
     win:(n)=>`${n} هو الفائز!`,
     playAgain:"العب مرة أخرى", newTeams:"فرق جديدة",
     rulesTitle:"طريقة لعب مزاج",
-    rules:`<ul><li>فريقان: X و O، من 1 إلى 10 لاعبين.</li><li>اضغط على مربع فارغ.</li><li>اختر: صراحة، لغز، أو ثقافي.</li><li>ناقشوا الإجابة معًا.</li><li>صحيح احصل على المربع والعب مرة أخرى.</li><li>خطأ ينتقل الدور للفريق الآخر.</li><li>أول فريق يكوّن <b>5 متتالية</b> يفوز!</li></ul>`,
-    gotIt:"فهمت",
+    rules:`<ul><li>فريقان: X و O، من 1 إلى 10 لاعبين.</li><li>اضغط على مربع فارغ.</li><li>اختر فئة وأجب على السؤال.</li><li>إذا أجاب الفريق المختار، يحصل على المربع.</li><li>إذا أجاب الفريق الآخر، يمكنه الحصول على المربع أو الحصول على دورتين إضافيتين.</li><li>إذا لم يجب أحد، ينتقل الدور.</li><li>أول فريق يكوّن العدد المطلوب يفوز!</li></ul>`,
     restartConfirm:"إعادة بدء اللعبة؟ سيتم فقدان التقدم.",
     yesRestart:"نعم، إعادة", cancelBtn:"إلغاء",
     players:(n)=> `${n} ${n===1?"لاعب":"لاعبين"}`,
     aboutDesc:"مزاج لعبة جماعية بسيطة للأصدقاء.",
     aboutDev:"المطور: تميم الجابري",
     rotate:"يرجى تدوير الجوال إلى الوضع الأفقي",
-    menu:"القائمة", langMenu:"اللغة",
+    langMenu:"اللغة",
     winLength:"عدد المربعات للفوز (3-10):",
-    exit:"خروج",
     pause:"توقف مؤقت",
     resume:"استئناف",
     restartGame:"إعادة اللعبة",
     changeLang:"تغيير اللغة",
     howToPlay:"طريقة اللعب",
-    exitMenu:"الخروج إلى القائمة"
+    exitMenu:"الخروج إلى القائمة",
+    whoAnswered:"من أجاب؟",
+    team1:"الفريق 1",
+    team2:"الفريق 2",
+    nobody:"لا أحد",
+    extraChoice:"اختر ما سيحدث:",
+    claimSquare:"الحصول على المربع",
+    extraTurns:"الحصول على دورتين إضافيتين",
+    timerLabel:"الوقت المتبقي",
+    answering:(n)=>`${n} يجيب`,
+    answerLabel:"الإجابة:",
+    categoryLabels: {
+      riddle:"ألغاز", general:"معرفة عامة", football:"كرة القدم", 
+      videogames:"ألعاب الفيديو", music:"الموسيقى", movies:"الأفلام", tvshows:"المسلسلات",
+      geography:"الجغرافيا", science:"العلوم", animals:"الحيوانات", history:"التاريخ",
+      technology:"التكنولوجيا", food:"الطعام", brands:"العلامات التجارية", cars:"السيارات",
+      sports:"الرياضة", famouspeople:"المشاهير"
+    }
   }
 };
 
-// ----- State -----
+// ----- Bilingual Question Database -----
+const QUESTION_DB = {
+  riddle: [],
+  general: [],
+  football: [],
+  videogames: [],
+  music: [],
+  movies: [],
+  tvshows: [],
+  geography: [],
+  science: [],
+  animals: [],
+  history: [],
+  technology: [],
+  food: [],
+  brands: [],
+  cars: [],
+  sports: [],
+  famouspeople: []
+};
+
+// Generate bilingual questions
+function generateBilingualQuestions() {
+  // Riddles (English & Arabic)
+  const riddlesEn = [
+    "I speak without a mouth and hear without ears. What am I?|Echo",
+    "The more you take, the more you leave behind. What am I?|Footsteps",
+    "What has keys but can't open locks?|Piano",
+    "What has a head and a tail but no body?|Coin",
+    "What gets wetter as it dries?|Towel",
+    "I'm tall when young, short when old. What am I?|Candle",
+    "What has hands but can't clap?|Clock",
+    "What travels the world while staying in a corner?|Stamp",
+    "What has many teeth but can't bite?|Comb",
+    "What goes up but never comes down?|Age",
+    "What has a neck but no head?|Bottle",
+    "Which month has 28 days?|All of them",
+    "What can you catch but not throw?|Cold",
+    "What has one eye but can't see?|Needle",
+    "What building has the most stories?|Library",
+    "What has a bed but never sleeps?|River",
+    "What room has no doors or windows?|Mushroom",
+    "What must be broken before you use it?|Egg",
+    "I have cities but no houses, forests but no trees, water but no fish. What am I?|Map",
+    "What gets bigger the more you take away?|Hole"
+  ];
+  
+  const riddlesAr = [
+    "أتكلّم بدون فم وأسمع بدون أذن، من أنا؟|الصدى",
+    "كلما أخذت أكثر تركت أكثر خلفك، من أنا؟|آثار الأقدام",
+    "لدي مفاتيح لكن لا أفتح أقفالاً، من أنا؟|البيانو",
+    "لدي رأس وذيل لكن بدون جسم، من أنا؟|العملة",
+    "كلما جفّ صار أكثر ابتلالاً، ما هو؟|المنشفة",
+    "طويل حين صغير وقصير حين كبير، من أنا؟|الشمعة",
+    "لدي عقارب لكن لا تصفق، من أنا؟|الساعة",
+    "أسافر العالم وأنا في زاوية، من أنا؟|الطابع",
+    "لدي أسنان كثيرة لكن لا أعض، من أنا؟|المشط",
+    "يرتفع باستمرار لكن لا ينزل أبدًا، ما هو؟|العمر",
+    "لدي عنق لكن بدون رأس، من أنا؟|الزجاجة",
+    "أي شهر فيه 28 يومًا؟|كل الشهور",
+    "شيء قد تصاب به لكن لا تستطيع رميه، ما هو؟|البرد",
+    "لدي عين واحدة لكن لا أرى، من أنا؟|الإبرة",
+    "أي مبنى فيه أكبر عدد من الطوابق (القصص)؟|المكتبة",
+    "لدي سرير لكنني لا أنام أبدًا، من أنا؟|النهر",
+    "أي غرفة ليس فيها أبواب ولا نوافذ؟|الفطر",
+    "شيء يجب كسره قبل أن تستطيع استخدامه، ما هو؟|البيضة",
+    "لدي مدن لكن بدون منازل، وغابات بدون أشجار، ومياه بدون أسماك، من أنا؟|الخريطة",
+    "ما هو الشيء الذي يكبر كلما أخذت منه أكثر؟|الحفرة"
+  ];
+  
+  for (let i = 0; i < riddlesEn.length; i++) {
+    const [qe, ae] = riddlesEn[i].split('|');
+    const [qa, aa] = riddlesAr[i % riddlesAr.length].split('|');
+    QUESTION_DB.riddle.push({ en: { q: qe.trim(), a: ae.trim() }, ar: { q: qa.trim(), a: aa.trim() } });
+  }
+  
+  // General Knowledge
+  const generalEn = [
+    "What is the capital of France?|Paris",
+    "What is the capital of Italy?|Rome",
+    "What is the capital of Spain?|Madrid",
+    "What is the capital of Germany?|Berlin",
+    "What is the capital of Japan?|Tokyo",
+    "What is the largest country in the world?|Russia",
+    "What is the smallest country in the world?|Vatican City",
+    "What is the longest river in the world?|Nile",
+    "What is the highest mountain in the world?|Everest",
+    "What is the largest ocean in the world?|Pacific",
+    "What is the chemical formula for water?|H2O",
+    "What gas do plants absorb?|Carbon dioxide",
+    "How many bones are in the adult human body?|206",
+    "How many teeth does an adult human have?|32",
+    "Who was the first President of the USA?|George Washington",
+    "In which year did World War II start?|1939",
+    "What is the fastest land animal?|Cheetah",
+    "What is the largest mammal?|Blue Whale",
+    "What is the largest planet?|Jupiter",
+    "Which planet is known as the Red Planet?|Mars",
+    "Who was the first person on the Moon?|Neil Armstrong",
+    "Who painted the Mona Lisa?|Leonardo da Vinci",
+    "Who wrote Romeo and Juliet?|William Shakespeare",
+    "What is the largest organ in the human body?|Skin",
+    "What is the hardest natural substance?|Diamond"
+  ];
+  
+  const generalAr = [
+    "ما هي عاصمة فرنسا؟|باريس",
+    "ما هي عاصمة إيطاليا؟|روما",
+    "ما هي عاصمة إسبانيا؟|مدريد",
+    "ما هي عاصمة ألمانيا؟|برلين",
+    "ما هي عاصمة اليابان؟|طوكيو",
+    "ما هي أكبر دولة في العالم؟|روسيا",
+    "ما هي أصغر دولة في العالم؟|الفاتيكان",
+    "ما هو أطول نهر في العالم؟|النيل",
+    "ما هو أعلى جبل في العالم؟|إيفرست",
+    "ما هو أكبر محيط في العالم؟|المحيط الهادئ",
+    "ما هي الصيغة الكيميائية للماء؟|H2O",
+    "ما هو الغاز الذي تمتصه النباتات؟|ثاني أكسيد الكربون",
+    "كم عدد عظام جسم الإنسان البالغ؟|206",
+    "كم عدد أسنان الإنسان البالغ؟|32",
+    "من كان أول رئيس للولايات المتحدة؟|جورج واشنطن",
+    "في أي عام بدأت الحرب العالمية الثانية؟|1939",
+    "ما هو أسرع حيوان بري؟|الفهد",
+    "ما هو أكبر حيوان ثديي؟|الحوت الأزرق",
+    "ما هو أكبر كوكب في المجموعة الشمسية؟|المشتري",
+    "ما هو الكوكب المعروف بالكوكب الأحمر؟|المريخ",
+    "من كان أول شخص على سطح القمر؟|نيل أرمسترونغ",
+    "من رسم لوحة الموناليزا؟|ليوناردو دافنشي",
+    "من كتب مسرحية روميو وجولييت؟|ويليام شكسبير",
+    "ما هو أكبر عضو في جسم الإنسان؟|الجلد",
+    "ما هي أصلب مادة طبيعية؟|الألماس"
+  ];
+  
+  for (let i = 0; i < generalEn.length; i++) {
+    const [qe, ae] = generalEn[i].split('|');
+    const [qa, aa] = generalAr[i % generalAr.length].split('|');
+    QUESTION_DB.general.push({ en: { q: qe.trim(), a: ae.trim() }, ar: { q: qa.trim(), a: aa.trim() } });
+  }
+  
+  // Football
+  const footballEn = [
+    "Which country won the 2022 World Cup?|Argentina",
+    "Which country won the 2018 World Cup?|France",
+    "Which country has the most World Cup wins?|Brazil",
+    "Which player has the most Ballon d'Or awards?|Lionel Messi",
+    "Which club has the most Champions League titles?|Real Madrid",
+    "Who is the all-time top scorer?|Cristiano Ronaldo",
+    "Which club plays at Camp Nou?|Barcelona",
+    "Which club plays at Old Trafford?|Manchester United",
+    "Which club plays at Anfield?|Liverpool",
+    "Which club plays at Santiago Bernabeu?|Real Madrid",
+    "Which club plays at Allianz Arena?|Bayern Munich"
+  ];
+  
+  const footballAr = [
+    "من فاز بكأس العالم 2022؟|الأرجنتين",
+    "من فاز بكأس العالم 2018؟|فرنسا",
+    "من هو أكثر منتخب فاز بكأس العالم؟|البرازيل",
+    "من هو اللاعب الأكثر فوزاً بالكرة الذهبية؟|ليونيل ميسي",
+    "من هو النادي الأكثر فوزاً بدوري أبطال أوروبا؟|ريال مدريد",
+    "من هو الهداف التاريخي لكرة القدم؟|كريستيانو رونالدو",
+    "أي نادٍ يلعب في ملعب كامب نو؟|برشلونة",
+    "أي نادٍ يلعب في ملعب أولد ترافورد؟|مانشستر يونايتد",
+    "أي نادٍ يلعب في ملعب أنفيلد؟|ليفربول",
+    "أي نادٍ يلعب في ملعب سانتياغو برنابيو؟|ريال مدريد",
+    "أي نادٍ يلعب في ملعب أليانز أرينا؟|بايرن ميونخ"
+  ];
+  
+  for (let i = 0; i < footballEn.length; i++) {
+    const [qe, ae] = footballEn[i].split('|');
+    const [qa, aa] = footballAr[i % footballAr.length].split('|');
+    QUESTION_DB.football.push({ en: { q: qe.trim(), a: ae.trim() }, ar: { q: qa.trim(), a: aa.trim() } });
+  }
+  
+  // Video Games
+  const vgEn = [
+    "Which game features Steve?|Minecraft",
+    "Which game features Arthur Morgan?|Red Dead Redemption 2",
+    "Which game features CJ?|GTA San Andreas",
+    "Which game features Kratos?|God of War",
+    "Which game features Nathan Drake?|Uncharted",
+    "Which game features Lara Croft?|Tomb Raider",
+    "Which game features Link?|Legend of Zelda",
+    "Which game features Mario?|Super Mario",
+    "Which game features Sonic?|Sonic the Hedgehog",
+    "Which game features Pikachu?|Pokemon"
+  ];
+  
+  const vgAr = [
+    "ما هي اللعبة التي تظهر فيها شخصية ستيف؟|ماينكرافت",
+    "ما هي اللعبة التي تظهر فيها شخصية آرثر مورغان؟|ريد ديد ريدمبشن 2",
+    "ما هي اللعبة التي تظهر فيها شخصية سي جيه؟|جتا سان أندرياس",
+    "ما هي اللعبة التي تظهر فيها شخصية كريتوس؟|غاد أوف وور",
+    "ما هي اللعبة التي تظهر فيها شخصية ناثان دريك؟|أنشارتد",
+    "ما هي اللعبة التي تظهر فيها شخصية لارا كروفت؟|تومب رايدر",
+    "ما هي اللعبة التي تظهر فيها شخصية لينك؟|ليجند أوف زيلدا",
+    "ما هي اللعبة التي تظهر فيها شخصية ماريو؟|سوبر ماريو",
+    "ما هي اللعبة التي تظهر فيها شخصية سونيك؟|سونيك ذا هيدجهوغ",
+    "ما هي اللعبة التي تظهر فيها شخصية بيكاتشو؟|بوكيمون"
+  ];
+  
+  for (let i = 0; i < vgEn.length; i++) {
+    const [qe, ae] = vgEn[i].split('|');
+    const [qa, aa] = vgAr[i % vgAr.length].split('|');
+    QUESTION_DB.videogames.push({ en: { q: qe.trim(), a: ae.trim() }, ar: { q: qa.trim(), a: aa.trim() } });
+  }
+  
+  // Music
+  const musicEn = [
+    "Who sang 'Shape of You'?|Ed Sheeran",
+    "Who sang 'Bohemian Rhapsody'?|Queen",
+    "Who sang 'Billie Jean'?|Michael Jackson",
+    "Who sang 'Imagine'?|John Lennon",
+    "Who sang 'Yesterday'?|The Beatles",
+    "Who sang 'Smells Like Teen Spirit'?|Nirvana",
+    "Who sang 'Hotel California'?|Eagles",
+    "Who sang 'Rolling in the Deep'?|Adele",
+    "Who sang 'Uptown Funk'?|Bruno Mars",
+    "Who sang 'Despacito'?|Luis Fonsi"
+  ];
+  
+  const musicAr = [
+    "من غنى أغنية 'Shape of You'؟|إد شيران",
+    "من غنى أغنية 'Bohemian Rhapsody'؟|كوين",
+    "من غنى أغنية 'Billie Jean'؟|مايكل جاكسون",
+    "من غنى أغنية 'Imagine'؟|جون لينون",
+    "من غنى أغنية 'Yesterday'؟|البيتلز",
+    "من غنى أغنية 'Smells Like Teen Spirit'؟|نيرفانا",
+    "من غنى أغنية 'Hotel California'؟|إيجلز",
+    "من غنى أغنية 'Rolling in the Deep'؟|أديل",
+    "من غنى أغنية 'Uptown Funk'؟|برونو مارس",
+    "من غنى أغنية 'Despacito'؟|لويس فونسي"
+  ];
+  
+  for (let i = 0; i < musicEn.length; i++) {
+    const [qe, ae] = musicEn[i].split('|');
+    const [qa, aa] = musicAr[i % musicAr.length].split('|');
+    QUESTION_DB.music.push({ en: { q: qe.trim(), a: ae.trim() }, ar: { q: qa.trim(), a: aa.trim() } });
+  }
+  
+  // Movies
+  const movieEn = [
+    "Which movie features Vito Corleone?|The Godfather",
+    "Which movie features Rick Blaine?|Casablanca",
+    "Which movie features Scarlett O'Hara?|Gone with the Wind",
+    "Which movie features Bruce Wayne?|The Dark Knight",
+    "Which movie features Rose Dawson?|Titanic",
+    "Which movie features Jake Sully?|Avatar",
+    "Which movie features Tony Stark?|Avengers",
+    "Which movie features Cobb?|Inception",
+    "Which movie features Neo?|The Matrix"
+  ];
+  
+  const movieAr = [
+    "في أي فيلم تظهر شخصية فيتو كورليوني؟|العراب",
+    "في أي فيلم تظهر شخصية ريك بلين؟|كازابلانكا",
+    "في أي فيلم تظهر شخصية سكارليت أوهارا؟|ذهب مع الريح",
+    "في أي فيلم تظهر شخصية بروس واين؟|النايت رايدر",
+    "في أي فيلم تظهر شخصية روز داوسون؟|تيتانيك",
+    "في أي فيلم تظهر شخصية جيك سولي؟|أفاتار",
+    "في أي فيلم تظهر شخصية توني ستارك؟|المنتقمون",
+    "في أي فيلم تظهر شخصية كوب؟|إنسبشن",
+    "في أي فيلم تظهر شخصية نيو؟|ذا ماتريكس"
+  ];
+  
+  for (let i = 0; i < movieEn.length; i++) {
+    const [qe, ae] = movieEn[i].split('|');
+    const [qa, aa] = movieAr[i % movieAr.length].split('|');
+    QUESTION_DB.movies.push({ en: { q: qe.trim(), a: ae.trim() }, ar: { q: qa.trim(), a: aa.trim() } });
+  }
+  
+  // Fill other categories with general questions
+  const otherCats = ['tvshows', 'geography', 'science', 'animals', 'history', 'technology', 'food', 'brands', 'cars', 'sports', 'famouspeople'];
+  for (const cat of otherCats) {
+    QUESTION_DB[cat] = QUESTION_DB.general.slice(0, 20).map(q => ({ en: q.en, ar: q.ar }));
+  }
+}
+
+// ----- Poster Generator -----
+function generatePoster(category, question) {
+  const container = document.getElementById('posterContainer');
+  container.innerHTML = '';
+  container.classList.remove('hidden');
+  
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 800 450');
+  svg.style.width = '100%';
+  svg.style.height = '100%';
+  
+  // Background
+  const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  bg.setAttribute('width', '800');
+  bg.setAttribute('height', '450');
+  bg.setAttribute('fill', '#1a1a2e');
+  svg.appendChild(bg);
+  
+  if (category === 'football') {
+    // Football field
+    const field = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    field.setAttribute('x', '100');
+    field.setAttribute('y', '50');
+    field.setAttribute('width', '600');
+    field.setAttribute('height', '350');
+    field.setAttribute('fill', '#2d8a4e');
+    field.setAttribute('rx', '10');
+    svg.appendChild(field);
+    
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '400');
+    circle.setAttribute('cy', '225');
+    circle.setAttribute('r', '80');
+    circle.setAttribute('fill', 'none');
+    circle.setAttribute('stroke', '#fff');
+    circle.setAttribute('stroke-width', '3');
+    svg.appendChild(circle);
+    
+    const ball = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    ball.setAttribute('cx', '400');
+    ball.setAttribute('cy', '225');
+    ball.setAttribute('r', '25');
+    ball.setAttribute('fill', '#fff');
+    ball.setAttribute('stroke', '#333');
+    ball.setAttribute('stroke-width', '2');
+    svg.appendChild(ball);
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '400');
+    text.setAttribute('y', '420');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#ffc72c');
+    text.setAttribute('font-size', '24');
+    text.setAttribute('font-weight', '800');
+    text.textContent = lang === 'ar' ? 'تحدي كرة القدم' : 'FOOTBALL CHALLENGE';
+    svg.appendChild(text);
+    
+  } else if (category === 'videogames') {
+    // Gaming controller
+    const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    grad.setAttribute('id', 'gameGrad');
+    const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s1.setAttribute('offset', '0%');
+    s1.setAttribute('stop-color', '#ff6b6b');
+    const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s2.setAttribute('offset', '100%');
+    s2.setAttribute('stop-color', '#4ecdc4');
+    grad.appendChild(s1);
+    grad.appendChild(s2);
+    svg.appendChild(grad);
+    
+    const controller = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    controller.setAttribute('x', '200');
+    controller.setAttribute('y', '150');
+    controller.setAttribute('width', '400');
+    controller.setAttribute('height', '180');
+    controller.setAttribute('rx', '40');
+    controller.setAttribute('fill', 'url(#gameGrad)');
+    svg.appendChild(controller);
+    
+    const dpad = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    dpad.setAttribute('x', '230');
+    dpad.setAttribute('y', '200');
+    dpad.setAttribute('width', '60');
+    dpad.setAttribute('height', '80');
+    dpad.setAttribute('rx', '5');
+    dpad.setAttribute('fill', '#333');
+    dpad.setAttribute('opacity', '0.8');
+    svg.appendChild(dpad);
+    
+    const colors = ['#ff4757', '#2ed573', '#ffa502', '#3742fa'];
+    const positions = [[550, 200], [580, 200], [550, 240], [580, 240]];
+    positions.forEach((pos, i) => {
+      const btn = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      btn.setAttribute('cx', pos[0]);
+      btn.setAttribute('cy', pos[1]);
+      btn.setAttribute('r', '18');
+      btn.setAttribute('fill', colors[i]);
+      svg.appendChild(btn);
+    });
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '400');
+    text.setAttribute('y', '420');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#ffc72c');
+    text.setAttribute('font-size', '24');
+    text.setAttribute('font-weight', '800');
+    text.textContent = lang === 'ar' ? 'تحدي ألعاب الفيديو' : 'GAMING CHALLENGE';
+    svg.appendChild(text);
+    
+  } else if (category === 'music') {
+    // Music theme
+    const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    grad.setAttribute('id', 'musicGrad');
+    const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s1.setAttribute('offset', '0%');
+    s1.setAttribute('stop-color', '#6c5ce7');
+    const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s2.setAttribute('offset', '100%');
+    s2.setAttribute('stop-color', '#fd79a8');
+    grad.appendChild(s1);
+    grad.appendChild(s2);
+    svg.appendChild(grad);
+    
+    const bg2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg2.setAttribute('width', '800');
+    bg2.setAttribute('height', '450');
+    bg2.setAttribute('fill', 'url(#musicGrad)');
+    svg.appendChild(bg2);
+    
+    const notes = [[200, 150, 60], [300, 100, 50], [400, 130, 55], [500, 90, 45], [600, 160, 50]];
+    notes.forEach(([x, y, size]) => {
+      const note = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      note.setAttribute('cx', x);
+      note.setAttribute('cy', y);
+      note.setAttribute('r', size/2);
+      note.setAttribute('fill', 'rgba(255,255,255,0.3)');
+      svg.appendChild(note);
+    });
+    
+    for (let i = 0; i < 5; i++) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', '100');
+      line.setAttribute('y1', 200 + i * 30);
+      line.setAttribute('x2', '700');
+      line.setAttribute('y2', 200 + i * 30);
+      line.setAttribute('stroke', 'rgba(255,255,255,0.2)');
+      line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+    }
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '400');
+    text.setAttribute('y', '420');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#ffc72c');
+    text.setAttribute('font-size', '24');
+    text.setAttribute('font-weight', '800');
+    text.textContent = lang === 'ar' ? 'تحدي الموسيقى' : 'MUSIC CHALLENGE';
+    svg.appendChild(text);
+    
+  } else if (category === 'movies') {
+    // Movie theme
+    const grad = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+    grad.setAttribute('id', 'movieGrad');
+    const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s1.setAttribute('offset', '0%');
+    s1.setAttribute('stop-color', '#2d3436');
+    const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s2.setAttribute('offset', '100%');
+    s2.setAttribute('stop-color', '#000');
+    grad.appendChild(s1);
+    grad.appendChild(s2);
+    svg.appendChild(grad);
+    
+    const bg3 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg3.setAttribute('width', '800');
+    bg3.setAttribute('height', '450');
+    bg3.setAttribute('fill', 'url(#movieGrad)');
+    svg.appendChild(bg3);
+    
+    for (let i = 0; i < 10; i++) {
+      const strip = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      strip.setAttribute('x', 50 + i * 70);
+      strip.setAttribute('y', '100');
+      strip.setAttribute('width', '50');
+      strip.setAttribute('height', '250');
+      strip.setAttribute('fill', 'rgba(255,255,255,0.1)');
+      strip.setAttribute('rx', '5');
+      svg.appendChild(strip);
+    }
+    
+    const clap = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    clap.setAttribute('x', '320');
+    clap.setAttribute('y', '140');
+    clap.setAttribute('width', '160');
+    clap.setAttribute('height', '120');
+    clap.setAttribute('fill', '#fff');
+    clap.setAttribute('rx', '5');
+    svg.appendChild(clap);
+    
+    const clapTop = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    clapTop.setAttribute('x', '320');
+    clapTop.setAttribute('y', '140');
+    clapTop.setAttribute('width', '160');
+    clapTop.setAttribute('height', '30');
+    clapTop.setAttribute('fill', '#ffc72c');
+    clapTop.setAttribute('rx', '5');
+    svg.appendChild(clapTop);
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '400');
+    text.setAttribute('y', '420');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#ffc72c');
+    text.setAttribute('font-size', '24');
+    text.setAttribute('font-weight', '800');
+    text.textContent = lang === 'ar' ? 'تحدي الأفلام' : 'MOVIE CHALLENGE';
+    svg.appendChild(text);
+    
+  } else {
+    // Default category poster
+    const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    grad.setAttribute('id', 'defaultGrad');
+    const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s1.setAttribute('offset', '0%');
+    s1.setAttribute('stop-color', '#ffc72c');
+    const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s2.setAttribute('offset', '100%');
+    s2.setAttribute('stop-color', '#f39c12');
+    grad.appendChild(s1);
+    grad.appendChild(s2);
+    svg.appendChild(grad);
+    
+    const bg4 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg4.setAttribute('width', '800');
+    bg4.setAttribute('height', '450');
+    bg4.setAttribute('fill', 'url(#defaultGrad)');
+    svg.appendChild(bg4);
+    
+    for (let i = 0; i < 20; i++) {
+      const shape = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      shape.setAttribute('cx', Math.random() * 800);
+      shape.setAttribute('cy', Math.random() * 450);
+      shape.setAttribute('r', Math.random() * 60 + 10);
+      shape.setAttribute('fill', `rgba(255,255,255,${Math.random() * 0.2 + 0.05})`);
+      svg.appendChild(shape);
+    }
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '400');
+    text.setAttribute('y', '420');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#161616');
+    text.setAttribute('font-size', '28');
+    text.setAttribute('font-weight', '800');
+    const label = UI_STRINGS[lang].categoryLabels[category] || category.toUpperCase();
+    text.textContent = label;
+    svg.appendChild(text);
+  }
+  
+  container.appendChild(svg);
+  
+  const label = document.createElement('span');
+  label.className = 'poster-label';
+  label.textContent = UI_STRINGS[lang].categoryLabels[category] || category.toUpperCase();
+  container.appendChild(label);
+}
+
+// ----- Helpers -----
+function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+let usedQuestions = {};
 let lang = 'en';
 let boardSize = 5;
 let state = {
@@ -608,420 +1220,536 @@ let state = {
   teamO: { name:'Team O', count:4 },
   pendingCell: null,
   pendingCategory: null,
-  gameOver: false
+  gameOver: false,
+  extraTurns: 0,
+  extraTurnsTeam: null
 };
 let currentQuestion = null;
 let pendingWin = false;
 let winnerTeam = null;
+let timerInterval = null;
+let timerValue = 60;
+let timerPhase = 'team1';
+let answerRevealed = false;
 
-// ----- Question Bank (shortened) -----
-const QUESTIONS = {
-  en:{
-    truth:["What's an embarrassing moment for your team?","If you could switch lives with a celebrity for a day, who?","What's a hidden talent someone on your team has?","What's the funniest nickname anyone on your team has had?","What's the first thing you'd buy with a lot of money?","What food does your whole team hate?","What's the worst gift someone on your team received?","Where would your team travel right now?","What childhood fear does someone on your team still have?","What useless skill does someone on your team have?","What business would your team start together?","What movie does your whole team think is overrated?","What small lie has someone on your team told recently?","What would be your team's theme song?","What would your team never do on a dare?","What weird habit does someone on your team have?","Which TV show would your team live in?","What rumor did someone on your team once believe?"],
-    riddle:[{q:"I speak without a mouth and hear without ears. What am I?",a:"Echo"},{q:"The more you take, the more you leave behind. What am I?",a:"Footsteps"},{q:"What has keys but can't open locks?",a:"Piano"},{q:"What has a head and a tail but no body?",a:"Coin"},{q:"What gets wetter as it dries?",a:"Towel"},{q:"I'm tall when young, short when old. What am I?",a:"Candle"},{q:"What has hands but can't clap?",a:"Clock"},{q:"What travels the world while staying in a corner?",a:"Stamp"},{q:"What has many teeth but can't bite?",a:"Comb"},{q:"What goes up but never comes down?",a:"Age"},{q:"What has a neck but no head?",a:"Bottle"},{q:"Which month has 28 days?",a:"All of them"},{q:"What can you catch but not throw?",a:"Cold"},{q:"What has one eye but can't see?",a:"Needle"},{q:"What building has the most stories?",a:"Library"},{q:"What has a bed but never sleeps?",a:"River"},{q:"What room has no doors or windows?",a:"Mushroom"},{q:"What must be broken before you use it?",a:"Egg"}],
-    general:[{q:"Capital of France?",a:"Paris"},{q:"How many continents?",a:"Seven"},{q:"Largest planet?",a:"Jupiter"},{q:"Who wrote Romeo and Juliet?",a:"Shakespeare"},{q:"Chemical formula for water?",a:"H2O"},{q:"Football players on field?",a:"Eleven"},{q:"Fastest land animal?",a:"Cheetah"},{q:"Largest ocean?",a:"Pacific"},{q:"Great Pyramid location?",a:"Egypt"},{q:"Smallest prime number?",a:"Two"},{q:"Colors in a rainbow?",a:"Seven"},{q:"Currency of Japan?",a:"Yen"},{q:"Gas plants absorb?",a:"Carbon dioxide"},{q:"Who painted the Mona Lisa?",a:"Leonardo da Vinci"},{q:"Tallest mountain?",a:"Everest"},{q:"Bones in adult body?",a:"206"},{q:"Longest river?",a:"Nile"},{q:"National sport of Japan?",a:"Sumo"}]
-  },
-  ar:{
-    truth:["ما هو أكثر موقف محرج حدث لأحد أفراد فريقكم؟","لو استطاع فريقكم تبديل حياته مع مشهور ليوم واحد، من سيختارون؟","ما هي الموهبة الخفية التي يملكها أحد أفراد فريقكم؟","ما هو ألطف لقب حصل عليه أحد أفراد فريقكم؟","ما أول شيء سيشترونه إذا ربحوا مبلغًا كبيرًا؟","ما هو الأكل الذي يكرهه كل أفراد فريقكم؟","ما هي أسوأ هدية استلمها أحد أفراد فريقكم؟","أين يسافر فريقكم لو استطاع السفر الآن؟","ما هو خوف من الطفولة ما زال موجودًا عند أحد أفراد الفريق؟","ما هي أكثر مهارة عديمة الفائدة يملكها أحد أفراد الفريق؟","ما هو المشروع الذي سيفتحه فريقكم معًا؟","ما هو الفيلم الذي يتفق الفريق على أنه مبالغ في تقييمه؟","ما هي أصغر كذبة قالها أحد أفراد الفريق مؤخرًا؟","ما هي الأغنية المميزة لفريقكم؟","ما هو الشيء الذي لن يفعله فريقكم أبدًا حتى لو تحداهم أحد؟","ما هي أغرب عادة عند أحد أفراد فريقكم؟","في أي مسلسل سيعيش فريقكم لو استطاع؟","ما هي الشائعة التي صدّقها أحد أفراد فريقكم؟"],
-    riddle:[{q:"أتكلّم بدون فم وأسمع بدون أذن، من أنا؟",a:"الصدى"},{q:"كلما أخذت أكثر تركت أكثر خلفك، من أنا؟",a:"آثار الأقدام"},{q:"لدي مفاتيح لكن لا أفتح أقفالاً، من أنا؟",a:"البيانو"},{q:"لدي رأس وذيل لكن بدون جسم، من أنا؟",a:"العملة"},{q:"كلما جفّ صار أكثر ابتلالاً، ما هو؟",a:"المنشفة"},{q:"طويل حين صغير وقصير حين كبير، من أنا؟",a:"الشمعة"},{q:"لدي عقارب لكن لا تصفق، من أنا؟",a:"الساعة"},{q:"أسافر العالم وأنا في زاوية، من أنا؟",a:"الطابع"},{q:"لدي أسنان كثيرة لكن لا أعض، من أنا؟",a:"المشط"},{q:"يرتفع باستمرار لكن لا ينزل أبدًا، ما هو؟",a:"العمر"},{q:"لدي عنق لكن بدون رأس، من أنا؟",a:"الزجاجة"},{q:"أي شهر فيه 28 يومًا؟",a:"كل الشهور"},{q:"شيء قد تصاب به لكن لا تستطيع رميه، ما هو؟",a:"البرد"},{q:"لدي عين واحدة لكن لا أرى، من أنا؟",a:"الإبرة"},{q:"أي مبنى فيه أكبر عدد من الطوابق (القصص)؟",a:"المكتبة"},{q:"لدي سرير لكنني لا أنام أبدًا، من أنا؟",a:"النهر"},{q:"أي غرفة ليس فيها أبواب ولا نوافذ؟",a:"الفطر"},{q:"شيء يجب كسره قبل أن تستطيع استخدامه، ما هو؟",a:"البيضة"}],
-    general:[{q:"ما هي عاصمة فرنسا؟",a:"باريس"},{q:"كم عدد قارات العالم؟",a:"سبع"},{q:"ما هو أكبر كوكب في مجموعتنا الشمسية؟",a:"المشتري"},{q:"من كاتب مسرحية روميو وجولييت؟",a:"شكسبير"},{q:"ما هي الصيغة الكيميائية للماء؟",a:"H2O"},{q:"كم عدد لاعبي كرة القدم داخل الملعب؟",a:"أحد عشر"},{q:"ما هو أسرع حيوان بري؟",a:"الفهد"},{q:"ما هو أكبر محيط على وجه الأرض؟",a:"المحيط الهادئ"},{q:"في أي دولة يقع هرم الجيزة الأكبر؟",a:"مصر"},{q:"ما هو أصغر عدد أولي؟",a:"اثنان"},{q:"كم عدد ألوان قوس قزح؟",a:"سبعة"},{q:"ما هي عملة اليابان؟",a:"الين"},{q:"ما هو الغاز الذي تمتصه النباتات من الهواء؟",a:"ثاني أكسيد الكربون"},{q:"من رسم لوحة الموناليزا؟",a:"دافنشي"},{q:"ما هو أعلى جبل في العالم؟",a:"جبل إيفرست"},{q:"كم عدد عظام جسم الإنسان البالغ؟",a:"206"},{q:"ما هو أطول نهر في العالم؟",a:"نهر النيل"},{q:"ما هي الرياضة الوطنية في اليابان؟",a:"السومو"}]
+function getQuestion(category) {
+  const pool = QUESTION_DB[category] || QUESTION_DB.general;
+  if (!usedQuestions[category]) usedQuestions[category] = [];
+  const available = pool.filter((_, i) => !usedQuestions[category].includes(i));
+  if (available.length === 0) {
+    usedQuestions[category] = [];
+    return pool[Math.floor(Math.random() * pool.length)];
   }
-};
-
-// ----- Helpers -----
-function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
-let bags = { en:{truth:[],riddle:[],general:[]}, ar:{truth:[],riddle:[],general:[]} };
-function refillBag(l,cat){ bags[l][cat] = shuffle(QUESTIONS[l][cat].map((_,i)=>i)); }
-function drawQuestion(cat){
-  if(bags[lang][cat].length===0) refillBag(lang,cat);
-  const idx = bags[lang][cat].pop();
-  return QUESTIONS[lang][cat][idx];
+  const idx = pool.indexOf(available[Math.floor(Math.random() * available.length)]);
+  usedQuestions[category].push(idx);
+  return pool[idx];
 }
 
-// ----- Translation -----
-function t(key, ...args){
-  const dict = I18N[lang];
-  if(typeof dict[key]==='function') return dict[key](...args);
+function t(key, ...args) {
+  const dict = UI_STRINGS[lang];
+  if (typeof dict[key] === 'function') return dict[key](...args);
   return dict[key] || key;
 }
 
-function setLang(l){
+function setLang(l) {
   lang = l;
   document.documentElement.lang = l;
-  document.documentElement.dir = l==='ar'?'rtl':'ltr';
-  document.getElementById('btnLangEn').classList.toggle('active', l==='en');
-  document.getElementById('btnLangAr').classList.toggle('active', l==='ar');
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('btnLangEn').classList.toggle('active', l === 'en');
+  document.getElementById('btnLangAr').classList.toggle('active', l === 'ar');
   applyTexts();
   updatePauseTexts();
+  updateCategoryGrid();
 }
 
-function applyTexts(){
-  document.getElementById('menuTitle').textContent = t('title');
-  document.getElementById('menuTagline').textContent = t('tagline');
-  document.getElementById('btnPlay').textContent = t('startGame');
-  document.getElementById('btnHow').textContent = t('howTo');
-  document.getElementById('btnAbout').textContent = t('about');
-  document.getElementById('btnLangMenu').textContent = t('langMenu');
-
-  document.getElementById('setupTitle').textContent = t('startGame');
-  document.getElementById('teamXLabel').textContent = t('teamx');
-  document.getElementById('teamOLabel').textContent = t('teamo');
-  document.getElementById('nameLabelX').textContent = t('nameLabel');
-  document.getElementById('nameLabelO').textContent = t('nameLabel');
-  document.getElementById('playersLabelX').textContent = t('playersLabel');
-  document.getElementById('playersLabelO').textContent = t('playersLabel');
-  document.getElementById('btnStartGame').textContent = t('startGame');
-  document.getElementById('btnBackMenu').textContent = t('back');
-  document.getElementById('winLengthLabel').textContent = t('winLength');
-
+function applyTexts() {
+  const dict = UI_STRINGS[lang];
+  document.getElementById('menuTitle').textContent = dict.title;
+  document.getElementById('menuTagline').textContent = dict.tagline;
+  document.getElementById('btnPlay').textContent = dict.startGame;
+  document.getElementById('btnHow').textContent = dict.howTo;
+  document.getElementById('btnAbout').textContent = dict.about;
+  document.getElementById('btnLangMenu').textContent = dict.langMenu;
+  document.getElementById('setupTitle').textContent = dict.startGame;
+  document.getElementById('teamXLabel').textContent = dict.teamx;
+  document.getElementById('teamOLabel').textContent = dict.teamo;
+  document.getElementById('nameLabelX').textContent = dict.nameLabel;
+  document.getElementById('nameLabelO').textContent = dict.nameLabel;
+  document.getElementById('playersLabelX').textContent = dict.playersLabel;
+  document.getElementById('playersLabelO').textContent = dict.playersLabel;
+  document.getElementById('btnStartGame').textContent = dict.startGame;
+  document.getElementById('btnBackMenu').textContent = dict.back;
+  document.getElementById('winLengthLabel').textContent = dict.winLength;
   const ix = document.getElementById('inputXName');
   const io = document.getElementById('inputOName');
-  if(!ix.dataset.touched) ix.value = t('teamXDefault');
-  if(!io.dataset.touched) io.value = t('teamODefault');
-  ix.placeholder = t('teamXDefault');
-  io.placeholder = t('teamODefault');
-
-  document.getElementById('gameTitle').textContent = t('title');
+  if (!ix.dataset.touched) ix.value = dict.teamXDefault;
+  if (!io.dataset.touched) io.value = dict.teamODefault;
+  ix.placeholder = dict.teamXDefault;
+  io.placeholder = dict.teamODefault;
+  document.getElementById('gameTitle').textContent = dict.title;
   document.getElementById('btnPause').textContent = '||';
-
-  document.getElementById('catTruth').textContent = t('truth');
-  document.getElementById('catRiddle').textContent = t('riddle');
-  document.getElementById('catGeneral').textContent = t('general');
-  document.getElementById('catCancel').textContent = t('cancel');
-  document.getElementById('catSub').textContent = t('pickOne');
-
-  document.getElementById('btnReveal').textContent = t('showAnswer');
-  document.getElementById('btnCorrect').textContent = t('correct');
-  document.getElementById('btnWrong').textContent = t('wrong');
-  document.getElementById('resultContinue').textContent = t('continue');
-  document.getElementById('btnPlayAgain').textContent = t('playAgain');
-  document.getElementById('btnNewTeams').textContent = t('newTeams');
-
-  document.getElementById('howTitle').textContent = t('rulesTitle');
-  document.getElementById('howText').innerHTML = t('rules');
-  document.getElementById('howBackBtn').textContent = t('back');
-  document.getElementById('aboutTitle').textContent = t('about');
-  document.getElementById('aboutDesc').innerHTML = t('aboutDesc');
-  document.getElementById('aboutDev').innerHTML = '<strong>'+t('aboutDev')+'</strong>';
-  document.getElementById('aboutBackBtn').textContent = t('back');
-
-  document.getElementById('restartText').textContent = t('restartConfirm');
-  document.getElementById('restartYes').textContent = t('yesRestart');
-  document.getElementById('restartNo').textContent = t('cancelBtn');
-  document.getElementById('rotateText').textContent = t('rotate');
-
+  document.getElementById('catCancel').textContent = dict.cancel;
+  document.getElementById('catSub').textContent = dict.pickOne;
+  document.getElementById('showAnswerBtn').textContent = dict.showAnswer;
+  document.getElementById('resultContinue').textContent = dict.continue;
+  document.getElementById('btnPlayAgain').textContent = dict.playAgain;
+  document.getElementById('btnNewTeams').textContent = dict.newTeams;
+  document.getElementById('howTitle').textContent = dict.rulesTitle;
+  document.getElementById('howText').innerHTML = dict.rules;
+  document.getElementById('howBackBtn').textContent = dict.back;
+  document.getElementById('aboutTitle').textContent = dict.about;
+  document.getElementById('aboutDesc').innerHTML = dict.aboutDesc;
+  document.getElementById('aboutDev').innerHTML = '<strong>' + dict.aboutDev + '</strong>';
+  document.getElementById('aboutBackBtn').textContent = dict.back;
+  document.getElementById('restartText').textContent = dict.restartConfirm;
+  document.getElementById('restartYes').textContent = dict.yesRestart;
+  document.getElementById('restartNo').textContent = dict.cancelBtn;
+  document.getElementById('rotateText').textContent = dict.rotate;
+  document.getElementById('whoAnsweredLabel').textContent = dict.whoAnswered;
+  document.getElementById('extraChoiceLabel').textContent = dict.extraChoice;
+  document.getElementById('extraClaim').textContent = dict.claimSquare;
+  document.getElementById('extraTurns').textContent = dict.extraTurns;
+  document.getElementById('timerLabel').textContent = dict.timerLabel;
   updateSidePanels();
   updateTurnPill();
+  updateWhoLabels();
 }
 
-function updatePauseTexts(){
-  document.getElementById('pauseTitle').textContent = t('pause');
-  document.getElementById('pauseResume').textContent = t('resume');
-  document.getElementById('pauseRestart').textContent = t('restartGame');
-  document.getElementById('pauseLang').textContent = t('changeLang');
-  document.getElementById('pauseHow').textContent = t('howToPlay');
-  document.getElementById('pauseExit').textContent = t('exitMenu');
+function updateWhoLabels() {
+  const dict = UI_STRINGS[lang];
+  const t1 = state.currentTeam === 'X' ? state.teamX.name : state.teamO.name;
+  const t2 = state.currentTeam === 'X' ? state.teamO.name : state.teamX.name;
+  document.getElementById('whoTeam1').textContent = t1;
+  document.getElementById('whoTeam2').textContent = t2;
+  document.getElementById('whoNobody').textContent = dict.nobody;
 }
 
-// ----- Navigation -----
-function showScreen(id){ 
-  document.querySelectorAll('.screen, .info-page').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.screen, .info-page').forEach(el=>el.style.display = 'none');
-  document.getElementById('game-screen').classList.add('hidden');
-  
-  const el = document.getElementById(id);
-  if(el) {
-    el.style.display = 'flex';
-    el.classList.remove('hidden');
+function updatePauseTexts() {
+  const dict = UI_STRINGS[lang];
+  document.getElementById('pauseTitle').textContent = dict.pause;
+  document.getElementById('pauseResume').textContent = dict.resume;
+  document.getElementById('pauseRestart').textContent = dict.restartGame;
+  document.getElementById('pauseLang').textContent = dict.changeLang;
+  document.getElementById('pauseHow').textContent = dict.howToPlay;
+  document.getElementById('pauseExit').textContent = dict.exitMenu;
+}
+
+function updateCategoryGrid() {
+  const grid = document.getElementById('categoryGrid');
+  if (!grid) return;
+  const dict = UI_STRINGS[lang];
+  grid.innerHTML = '';
+  for (const [key, cat] of Object.entries(CATEGORIES)) {
+    if (QUESTION_DB[key] && QUESTION_DB[key].length > 0) {
+      const btn = document.createElement('button');
+      btn.className = 'category-btn';
+      const label = dict.categoryLabels[key] || key;
+      btn.innerHTML = `<span class="cat-icon">${cat.icon}</span><span class="cat-label">${label}</span>`;
+      btn.onclick = (function(k) { return function() { chooseCategory(k); }; })(key);
+      grid.appendChild(btn);
+    }
   }
 }
 
-function showMenu(){ 
-  document.querySelectorAll('.info-page').forEach(el=>{
-    el.classList.remove('active');
-    el.style.display = 'none';
-  });
+// ----- Navigation -----
+function showScreen(id) {
+  document.querySelectorAll('.screen, .info-page').forEach(el => { el.classList.remove('active'); el.style.display = 'none'; });
+  document.getElementById('game-screen').classList.add('hidden');
+  const el = document.getElementById(id);
+  if (el) { el.style.display = 'flex'; el.classList.remove('hidden'); }
+}
+
+function showMenu() {
+  document.querySelectorAll('.info-page').forEach(el => { el.classList.remove('active'); el.style.display = 'none'; });
   document.getElementById('pauseOverlay').classList.remove('active');
   showScreen('menu-screen');
 }
 
-function showSetup(){ 
-  document.querySelectorAll('.info-page').forEach(el=>{
-    el.classList.remove('active');
-    el.style.display = 'none';
-  });
-  showScreen('setup-screen'); 
+function showSetup() {
+  document.querySelectorAll('.info-page').forEach(el => { el.classList.remove('active'); el.style.display = 'none'; });
+  showScreen('setup-screen');
 }
 
-function showInfo(page){
-  document.querySelectorAll('.screen').forEach(el=>{
-    el.style.display = 'none';
-    el.classList.add('hidden');
-  });
+function showInfo(page) {
+  document.querySelectorAll('.screen').forEach(el => { el.style.display = 'none'; el.classList.add('hidden'); });
   document.getElementById('game-screen').classList.add('hidden');
-  
-  document.querySelectorAll('.info-page').forEach(el=>{
-    el.classList.remove('active');
-    el.style.display = 'none';
-  });
-  
-  const target = document.getElementById(page==='how'?'infoHow':'infoAbout');
-  if(target) {
-    target.style.display = 'flex';
-    target.classList.add('active');
-  }
+  document.querySelectorAll('.info-page').forEach(el => { el.classList.remove('active'); el.style.display = 'none'; });
+  const target = document.getElementById(page === 'how' ? 'infoHow' : 'infoAbout');
+  if (target) { target.style.display = 'flex'; target.classList.add('active'); }
 }
 
-function closeInfo(){ 
-  document.querySelectorAll('.info-page').forEach(el=>{
-    el.classList.remove('active');
-    el.style.display = 'none';
-  });
-  
-  if(!document.getElementById('game-screen').classList.contains('hidden')){
+function closeInfo() {
+  document.querySelectorAll('.info-page').forEach(el => { el.classList.remove('active'); el.style.display = 'none'; });
+  if (!document.getElementById('game-screen').classList.contains('hidden')) {
     document.getElementById('game-screen').style.display = 'flex';
     document.getElementById('game-screen').classList.remove('hidden');
-  } else {
-    showMenu();
-  }
+  } else { showMenu(); }
 }
 
-function toggleLangFromMenu(){ const newLang = lang==='en'?'ar':'en'; setLang(newLang); }
+function toggleLangFromMenu() { const newLang = lang === 'en' ? 'ar' : 'en'; setLang(newLang); }
 
-// ----- Pause Menu Functions -----
-function togglePause(){
+// ----- Pause Menu -----
+function togglePause() {
   const overlay = document.getElementById('pauseOverlay');
   overlay.classList.toggle('active');
-  if(overlay.classList.contains('active')){
-    updatePauseTexts();
-  }
+  if (overlay.classList.contains('active')) { updatePauseTexts(); }
 }
 
-function pauseRestart(){
+function pauseRestart() { document.getElementById('pauseOverlay').classList.remove('active'); document.getElementById('modalRestart').classList.remove('hidden'); }
+
+function pauseLangToggle() { const newLang = lang === 'en' ? 'ar' : 'en'; setLang(newLang); updatePauseTexts(); }
+
+function pauseHowTo() { document.getElementById('pauseOverlay').classList.remove('active'); showInfo('how'); }
+
+function pauseExit() {
   document.getElementById('pauseOverlay').classList.remove('active');
-  document.getElementById('modalRestart').classList.remove('hidden');
-}
-
-function pauseLangToggle(){
-  const newLang = lang==='en'?'ar':'en';
-  setLang(newLang);
-  updatePauseTexts();
-}
-
-function pauseHowTo(){
-  document.getElementById('pauseOverlay').classList.remove('active');
-  showInfo('how');
-}
-
-function pauseExit(){
-  document.getElementById('pauseOverlay').classList.remove('active');
-  document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden'));
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
   document.getElementById('game-screen').classList.add('hidden');
   document.getElementById('game-screen').style.display = 'none';
-  document.querySelectorAll('.info-page').forEach(el=>{
-    el.classList.remove('active');
-    el.style.display = 'none';
-  });
+  document.querySelectorAll('.info-page').forEach(el => { el.classList.remove('active'); el.style.display = 'none'; });
   showMenu();
 }
 
 // ----- Setup -> Game -----
-function startGame(){
-  const t = I18N[lang];
-  const xName = document.getElementById('inputXName').value.trim() || t.teamXDefault;
-  const oName = document.getElementById('inputOName').value.trim() || t.teamODefault;
-  const xCount = parseInt(document.getElementById('selectXCount').value,10);
-  const oCount = parseInt(document.getElementById('selectOCount').value,10);
-  boardSize = parseInt(document.getElementById('winLengthSelect').value,10);
-
-  state.teamX = { name:xName, count:xCount };
-  state.teamO = { name:oName, count:oCount };
+function startGame() {
+  const dict = UI_STRINGS[lang];
+  const xName = document.getElementById('inputXName').value.trim() || dict.teamXDefault;
+  const oName = document.getElementById('inputOName').value.trim() || dict.teamODefault;
+  const xCount = parseInt(document.getElementById('selectXCount').value, 10);
+  const oCount = parseInt(document.getElementById('selectOCount').value, 10);
+  boardSize = parseInt(document.getElementById('winLengthSelect').value, 10);
+  state.teamX = { name: xName, count: xCount };
+  state.teamO = { name: oName, count: oCount };
   state.currentTeam = 'X';
   state.gameOver = false;
-  state.board = Array.from({length:boardSize}, ()=>Array(boardSize).fill(null));
-
+  state.extraTurns = 0;
+  state.extraTurnsTeam = null;
+  state.board = Array.from({ length: boardSize }, () => Array(boardSize).fill(null));
+  usedQuestions = {};
   buildBoard();
   updateSidePanels();
   updateTurnPill();
-
-  document.querySelectorAll('.screen, .info-page').forEach(el=>{
-    el.style.display = 'none';
-    el.classList.remove('active');
-  });
+  document.querySelectorAll('.screen, .info-page').forEach(el => { el.style.display = 'none'; el.classList.remove('active'); });
   document.getElementById('game-screen').style.display = 'flex';
   document.getElementById('game-screen').classList.remove('hidden');
   document.getElementById('pauseOverlay').classList.remove('active');
 }
 
-function goHome(){
-  document.getElementById('modalWin').classList.add('hidden');
-  pauseExit();
-}
+function goHome() { document.getElementById('modalWin').classList.add('hidden'); pauseExit(); }
 
-function newRoundSameTeams(){
+function newRoundSameTeams() {
   state.currentTeam = 'X';
   state.gameOver = false;
-  state.board = Array.from({length:boardSize}, ()=>Array(boardSize).fill(null));
+  state.extraTurns = 0;
+  state.extraTurnsTeam = null;
+  state.board = Array.from({ length: boardSize }, () => Array(boardSize).fill(null));
+  usedQuestions = {};
   buildBoard();
   updateTurnPill();
   document.getElementById('modalWin').classList.add('hidden');
   document.getElementById('pauseOverlay').classList.remove('active');
 }
 
-// ----- Board with numbered squares - FIXED CLICK SYSTEM -----
-function buildBoard(){
+// ----- Board -----
+function buildBoard() {
   const boardEl = document.getElementById('board');
   boardEl.innerHTML = '';
   boardEl.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
   boardEl.style.gridTemplateRows = `repeat(${boardSize}, 1fr)`;
-  
   let squareNumber = 1;
-  for(let r=0;r<boardSize;r++){
-    for(let c=0;c<boardSize;c++){
+  for (let r = 0; r < boardSize; r++) {
+    for (let c = 0; c < boardSize; c++) {
       const cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = `cell-${r}-${c}`;
       cell.dataset.row = r;
       cell.dataset.col = c;
-      
-      // Add number label
       const numberSpan = document.createElement('span');
       numberSpan.className = 'cell-number';
       numberSpan.textContent = squareNumber++;
       cell.appendChild(numberSpan);
-      
-      // Add symbol placeholder
       const symbolSpan = document.createElement('span');
       symbolSpan.className = 'cell-symbol';
       symbolSpan.id = `symbol-${r}-${c}`;
       cell.appendChild(symbolSpan);
-      
-      // Direct click handler
       cell.addEventListener('click', function(e) {
         const row = parseInt(this.dataset.row);
         const col = parseInt(this.dataset.col);
         onCellTap(row, col);
       });
-      
       boardEl.appendChild(cell);
     }
   }
 }
 
-function onCellTap(r,c){
-  // Prevent clicks if game is over
-  if(state.gameOver) {
+function onCellTap(r, c) {
+  if (state.gameOver) return;
+  if (state.board[r][c] !== null) return;
+  if (state.extraTurns > 0) {
+    state.board[r][c] = state.extraTurnsTeam;
+    renderCell(r, c);
+    state.extraTurns--;
+    const win = checkWin(r, c, state.extraTurnsTeam);
+    if (win) { state.gameOver = true; pendingWin = true; winnerTeam = state.extraTurnsTeam; showWin(winnerTeam); }
+    if (state.extraTurns === 0) {
+      state.currentTeam = state.currentTeam === 'X' ? 'O' : 'X';
+      updateTurnPill();
+    }
     return;
   }
-  // Prevent clicks on already filled cells
-  if(state.board[r][c] !== null) {
-    return;
-  }
-  // Set pending cell and open category modal
-  state.pendingCell = {r,c};
+  state.pendingCell = { r, c };
   openCategoryModal();
 }
 
-function renderCell(r,c){
+function renderCell(r, c) {
   const val = state.board[r][c];
   const cell = document.getElementById(`cell-${r}-${c}`);
   const symbolSpan = document.getElementById(`symbol-${r}-${c}`);
-  if(!cell || !symbolSpan) return;
-  
-  if(val){
+  if (!cell || !symbolSpan) return;
+  if (val) {
     symbolSpan.textContent = val;
-    cell.classList.add('filled', val==='X'?'filled-x':'filled-o');
+    cell.classList.add('filled', val === 'X' ? 'filled-x' : 'filled-o');
   }
 }
 
-function updateSidePanels(){
+function updateSidePanels() {
   document.getElementById('panelXName').textContent = state.teamX.name;
   document.getElementById('panelOName').textContent = state.teamO.name;
-  document.getElementById('panelXMeta').textContent = t('players', state.teamX.count);
-  document.getElementById('panelOMeta').textContent = t('players', state.teamO.count);
+  document.getElementById('panelXMeta').textContent = UI_STRINGS[lang].players(state.teamX.count);
+  document.getElementById('panelOMeta').textContent = UI_STRINGS[lang].players(state.teamO.count);
 }
 
-function updateTurnPill(){
+function updateTurnPill() {
   const pill = document.getElementById('turnPill');
-  const name = state.currentTeam==='X' ? state.teamX.name : state.teamO.name;
-  pill.textContent = t('turnOf', name);
-  pill.classList.remove('turn-x','turn-o');
-  pill.classList.add(state.currentTeam==='X'?'turn-x':'turn-o');
+  const name = state.currentTeam === 'X' ? state.teamX.name : state.teamO.name;
+  let text = UI_STRINGS[lang].turnOf(name);
+  if (state.extraTurns > 0 && state.extraTurnsTeam) {
+    const extraName = state.extraTurnsTeam === 'X' ? state.teamX.name : state.teamO.name;
+    text += ` (${state.extraTurns} extra turns - ${extraName})`;
+  }
+  pill.textContent = text;
+  pill.classList.remove('turn-x', 'turn-o');
+  pill.classList.add(state.currentTeam === 'X' ? 'turn-x' : 'turn-o');
 }
 
-// ----- Category Modal -----
-function openCategoryModal(){
-  const name = state.currentTeam==='X' ? state.teamX.name : state.teamO.name;
-  document.getElementById('catTitle').textContent = t('chooseCat', name);
+// ----- Category System -----
+const CATEGORIES = {
+  riddle: { icon: 'R' },
+  general: { icon: 'G' },
+  football: { icon: 'F' },
+  videogames: { icon: 'V' },
+  music: { icon: 'M' },
+  movies: { icon: 'Mo' },
+  tvshows: { icon: 'T' },
+  geography: { icon: 'Geo' },
+  science: { icon: 'Sci' },
+  animals: { icon: 'A' },
+  history: { icon: 'H' },
+  technology: { icon: 'Tech' },
+  food: { icon: 'F' },
+  brands: { icon: 'B' },
+  cars: { icon: 'C' },
+  sports: { icon: 'S' },
+  famouspeople: { icon: 'P' }
+};
+
+function openCategoryModal() {
+  const name = state.currentTeam === 'X' ? state.teamX.name : state.teamO.name;
+  document.getElementById('catTitle').textContent = UI_STRINGS[lang].chooseCat(name);
+  updateCategoryGrid();
   document.getElementById('modalCategory').classList.remove('hidden');
 }
-function cancelCategory(){
+
+function cancelCategory() {
   state.pendingCell = null;
   document.getElementById('modalCategory').classList.add('hidden');
 }
-function chooseCategory(cat){
+
+function chooseCategory(cat) {
   state.pendingCategory = cat;
   document.getElementById('modalCategory').classList.add('hidden');
   openQuestionModal(cat);
 }
 
-// ----- Question Modal -----
-function openQuestionModal(cat){
-  const name = state.currentTeam==='X' ? state.teamX.name : state.teamO.name;
+// ----- Question with Timer and Show Answer -----
+function openQuestionModal(cat) {
+  answerRevealed = false;
+  const name = state.currentTeam === 'X' ? state.teamX.name : state.teamO.name;
   document.getElementById('qTeamTitle').textContent = name;
   document.getElementById('qAnswer').textContent = '';
-
-  const revealBtn = document.getElementById('btnReveal');
-  if(cat==='truth'){
-    currentQuestion = { q: drawQuestion('truth'), a: null };
-    revealBtn.classList.add('hidden');
-  } else {
-    currentQuestion = drawQuestion(cat);
-    revealBtn.classList.remove('hidden');
+  document.getElementById('answerContainer').classList.add('hidden');
+  document.getElementById('showAnswerArea').classList.remove('hidden');
+  document.getElementById('whoAnsweredArea').classList.add('hidden');
+  document.getElementById('extraChoiceArea').classList.add('hidden');
+  document.getElementById('posterContainer').classList.add('hidden');
+  updateWhoLabels();
+  
+  const q = getQuestion(cat);
+  currentQuestion = q;
+  const qText = q[lang] ? q[lang].q : q.en.q;
+  document.getElementById('qText').textContent = qText;
+  
+  // Generate poster for visual categories
+  const visualCategories = ['football', 'videogames', 'music', 'movies', 'tvshows', 'brands', 'cars'];
+  if (visualCategories.includes(cat)) {
+    generatePoster(cat, q);
   }
-  document.getElementById('qText').textContent = currentQuestion.q;
+  
+  timerValue = 60;
+  timerPhase = 'team1';
+  const teamName = state.currentTeam === 'X' ? state.teamX.name : state.teamO.name;
+  document.getElementById('timerLabel').textContent = UI_STRINGS[lang].answering(teamName);
+  document.getElementById('timerDisplay').textContent = '60';
   document.getElementById('modalQuestion').classList.remove('hidden');
+  startTimer();
 }
 
-function revealAnswer(){
-  if(currentQuestion && currentQuestion.a){
-    document.getElementById('qAnswer').textContent = (lang==='ar'?'الإجابة: ':'Answer: ')+currentQuestion.a;
-  }
-}
-
-function resolveAnswer(isCorrect){
-  document.getElementById('modalQuestion').classList.add('hidden');
-  const {r,c} = state.pendingCell;
-  const teamKey = state.currentTeam;
-  const teamObj = teamKey==='X' ? state.teamX : state.teamO;
-  const nextTeam = teamKey==='X' ? state.teamO : state.teamX;
-
-  const banner = document.getElementById('resultBanner');
-  if(isCorrect){
-    state.board[r][c] = teamKey;
-    renderCell(r,c);
-    banner.className = 'result-banner ok';
-    banner.textContent = t('resultCorrect', teamObj.name);
-    const win = checkWin(r,c,teamKey);
-    if(win){
-      state.gameOver = true;
-      pendingWin = true;
-      winnerTeam = teamKey;
-    } else {
-      state.currentTeam = teamKey==='X' ? 'O' : 'X';
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timerValue--;
+    document.getElementById('timerDisplay').textContent = timerValue;
+    if (timerValue <= 0) {
+      clearInterval(timerInterval);
+      if (timerPhase === 'team1') {
+        timerPhase = 'team2';
+        timerValue = 30;
+        const team2 = state.currentTeam === 'X' ? state.teamO.name : state.teamX.name;
+        document.getElementById('timerLabel').textContent = UI_STRINGS[lang].answering(team2);
+        document.getElementById('timerDisplay').textContent = '30';
+        if (!answerRevealed) {
+          showAnswer();
+        }
+        timerInterval = setInterval(() => {
+          timerValue--;
+          document.getElementById('timerDisplay').textContent = timerValue;
+          if (timerValue <= 0) {
+            clearInterval(timerInterval);
+            if (!answerRevealed) {
+              showAnswer();
+            }
+          }
+        }, 1000);
+      } else {
+        if (!answerRevealed) {
+          showAnswer();
+        }
+      }
     }
-  } else {
-    banner.className = 'result-banner fail';
-    banner.textContent = t('resultWrong', teamObj.name, nextTeam.name);
-    state.currentTeam = teamKey==='X' ? 'O' : 'X';
+  }, 1000);
+}
+
+function showAnswer() {
+  if (answerRevealed) return;
+  answerRevealed = true;
+  if (currentQuestion && currentQuestion[lang]) {
+    const answer = currentQuestion[lang].a;
+    document.getElementById('qAnswer').textContent = UI_STRINGS[lang].answerLabel + ' ' + answer;
+    document.getElementById('answerContainer').classList.remove('hidden');
+    document.getElementById('showAnswerArea').classList.add('hidden');
+    document.getElementById('whoAnsweredArea').classList.remove('hidden');
+    document.getElementById('timerLabel').textContent = 'Time\'s up! Who answered?';
   }
-  state.pendingCell = null;
+}
+
+// ----- Who Answered System -----
+function whoAnswered(team) {
+  if (timerInterval) clearInterval(timerInterval);
+  const selectingTeam = state.currentTeam;
+  const otherTeam = selectingTeam === 'X' ? 'O' : 'X';
+  
+  if (team === 'team1') {
+    const answeredTeam = selectingTeam;
+    handleTeamAnswered(answeredTeam);
+  } else if (team === 'team2') {
+    const answeredTeam = otherTeam;
+    document.getElementById('whoAnsweredArea').classList.add('hidden');
+    document.getElementById('extraChoiceArea').classList.remove('hidden');
+    const name = answeredTeam === 'X' ? state.teamX.name : state.teamO.name;
+    document.getElementById('qTeamTitle').textContent = name + ' answered!';
+    window._answeredTeam = answeredTeam;
+  } else {
+    document.getElementById('modalQuestion').classList.add('hidden');
+    const banner = document.getElementById('resultBanner');
+    banner.className = 'result-banner info';
+    banner.textContent = 'Nobody answered. Turn passes.';
+    document.getElementById('modalResult').classList.remove('hidden');
+    state.currentTeam = state.currentTeam === 'X' ? 'O' : 'X';
+    updateTurnPill();
+    pendingWin = false;
+  }
+}
+
+function handleTeamAnswered(team) {
+  document.getElementById('modalQuestion').classList.add('hidden');
+  const { r, c } = state.pendingCell;
+  state.board[r][c] = team;
+  renderCell(r, c);
+  const win = checkWin(r, c, team);
+  if (win) {
+    state.gameOver = true;
+    pendingWin = true;
+    winnerTeam = team;
+    document.getElementById('modalResult').classList.remove('hidden');
+    const banner = document.getElementById('resultBanner');
+    banner.className = 'result-banner ok';
+    const name = team === 'X' ? state.teamX.name : state.teamO.name;
+    banner.textContent = name + ' answered correctly!';
+    return;
+  }
+  state.currentTeam = state.currentTeam === 'X' ? 'O' : 'X';
+  updateTurnPill();
+  const banner = document.getElementById('resultBanner');
+  banner.className = 'result-banner ok';
+  const name = team === 'X' ? state.teamX.name : state.teamO.name;
+  banner.textContent = name + ' answered correctly!';
   document.getElementById('modalResult').classList.remove('hidden');
 }
 
-function closeResult(){
+function extraChoice(choice) {
+  document.getElementById('extraChoiceArea').classList.add('hidden');
+  document.getElementById('modalQuestion').classList.add('hidden');
+  const answeredTeam = window._answeredTeam;
+  
+  if (choice === 'claim') {
+    const { r, c } = state.pendingCell;
+    state.board[r][c] = answeredTeam;
+    renderCell(r, c);
+    const win = checkWin(r, c, answeredTeam);
+    if (win) {
+      state.gameOver = true;
+      pendingWin = true;
+      winnerTeam = answeredTeam;
+      const banner = document.getElementById('resultBanner');
+      banner.className = 'result-banner ok';
+      const name = answeredTeam === 'X' ? state.teamX.name : state.teamO.name;
+      banner.textContent = name + ' claimed the square!';
+      document.getElementById('modalResult').classList.remove('hidden');
+      return;
+    }
+    state.currentTeam = state.currentTeam === 'X' ? 'O' : 'X';
+    updateTurnPill();
+    const banner = document.getElementById('resultBanner');
+    banner.className = 'result-banner ok';
+    const name = answeredTeam === 'X' ? state.teamX.name : state.teamO.name;
+    banner.textContent = name + ' claimed the square!';
+    document.getElementById('modalResult').classList.remove('hidden');
+  } else if (choice === 'extraturns') {
+    state.extraTurns = 2;
+    state.extraTurnsTeam = answeredTeam;
+    state.currentTeam = answeredTeam;
+    updateTurnPill();
+    const banner = document.getElementById('resultBanner');
+    banner.className = 'result-banner info';
+    const name = answeredTeam === 'X' ? state.teamX.name : state.teamO.name;
+    banner.textContent = name + ' gets 2 extra turns!';
+    document.getElementById('modalResult').classList.remove('hidden');
+  }
+}
+
+function closeResult() {
   document.getElementById('modalResult').classList.add('hidden');
-  if(pendingWin){
+  if (pendingWin) {
     pendingWin = false;
     showWin(winnerTeam);
   } else {
@@ -1030,22 +1758,22 @@ function closeResult(){
 }
 
 // ----- Win Check -----
-function checkWin(r,c,team){
-  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
-  for(const [dr,dc] of dirs){
-    let cells = [[r,c]];
-    let rr=r+dr, cc=c+dc;
-    while(rr>=0&&rr<boardSize&&cc>=0&&cc<boardSize&&state.board[rr][cc]===team){
-      cells.push([rr,cc]); rr+=dr; cc+=dc;
+function checkWin(r, c, team) {
+  const dirs = [[0, 1], [1, 0], [1, 1], [1, -1]];
+  for (const [dr, dc] of dirs) {
+    let cells = [[r, c]];
+    let rr = r + dr, cc = c + dc;
+    while (rr >= 0 && rr < boardSize && cc >= 0 && cc < boardSize && state.board[rr][cc] === team) {
+      cells.push([rr, cc]); rr += dr; cc += dc;
     }
-    rr=r-dr; cc=c-dc;
-    while(rr>=0&&rr<boardSize&&cc>=0&&cc<boardSize&&state.board[rr][cc]===team){
-      cells.push([rr,cc]); rr-=dr; cc-=dc;
+    rr = r - dr; cc = c - dc;
+    while (rr >= 0 && rr < boardSize && cc >= 0 && cc < boardSize && state.board[rr][cc] === team) {
+      cells.push([rr, cc]); rr -= dr; cc -= dc;
     }
-    if(cells.length>=boardSize){
-      cells.forEach(([R,C])=>{
+    if (cells.length >= boardSize) {
+      cells.forEach(([R, C]) => {
         const el = document.getElementById(`cell-${R}-${C}`);
-        if(el) el.classList.add('win-cell');
+        if (el) el.classList.add('win-cell');
       });
       return true;
     }
@@ -1053,39 +1781,39 @@ function checkWin(r,c,team){
   return false;
 }
 
-function showWin(teamKey){
-  const name = teamKey==='X' ? state.teamX.name : state.teamO.name;
-  document.getElementById('winText').textContent = t('win', name);
+function showWin(teamKey) {
+  const name = teamKey === 'X' ? state.teamX.name : state.teamO.name;
+  document.getElementById('winText').textContent = UI_STRINGS[lang].win(name);
   document.getElementById('modalWin').classList.remove('hidden');
 }
 
 // ----- Restart -----
-function confirmRestart(){ document.getElementById('modalRestart').classList.remove('hidden'); }
-function closeRestart(){ document.getElementById('modalRestart').classList.add('hidden'); }
-function doRestart(){
-  closeRestart();
-  newRoundSameTeams();
-}
+function confirmRestart() { document.getElementById('modalRestart').classList.remove('hidden'); }
 
-// ----- Init player selects -----
-function fillSelects(){
-  ['selectXCount','selectOCount'].forEach(id=>{
+function closeRestart() { document.getElementById('modalRestart').classList.add('hidden'); }
+
+function doRestart() { closeRestart(); newRoundSameTeams(); }
+
+// ----- Init -----
+function fillSelects() {
+  ['selectXCount', 'selectOCount'].forEach(id => {
     const sel = document.getElementById(id);
     sel.innerHTML = '';
-    for(let i=1;i<=10;i++){
+    for (let i = 1; i <= 10; i++) {
       const opt = document.createElement('option');
-      opt.value = i; opt.textContent = i;
-      if(i===4) opt.selected = true;
+      opt.value = i;
+      opt.textContent = i;
+      if (i === 4) opt.selected = true;
       sel.appendChild(opt);
     }
   });
 }
 
-// ----- Input touch tracking -----
-document.getElementById('inputXName').addEventListener('input', e=>{ e.target.dataset.touched='1'; });
-document.getElementById('inputOName').addEventListener('input', e=>{ e.target.dataset.touched='1'; });
+document.getElementById('inputXName').addEventListener('input', e => { e.target.dataset.touched = '1'; });
+document.getElementById('inputOName').addEventListener('input', e => { e.target.dataset.touched = '1'; });
 
 // ----- Start -----
+generateBilingualQuestions();
 fillSelects();
 setLang('en');
 showMenu();
