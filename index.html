@@ -147,6 +147,8 @@
     font-weight:700; font-size:clamp(10px,2.2vw,18px); padding:0; aspect-ratio:1/1;
     color:#555;
     position:relative;
+    cursor:pointer;
+    touch-action:manipulation;
   }
   .cell .cell-number{
     font-size:clamp(8px,1.4vw,14px);
@@ -158,13 +160,19 @@
     pointer-events:none;
   }
   .cell:not(.filled):active{ background:#ededed; }
-  .cell.filled-x{ background:#161616; color:#fff; }
+  .cell.filled-x{ background:#161616; color:#fff; cursor:default; }
   .cell.filled-x .cell-number{ color:rgba(255,255,255,0.4); }
-  .cell.filled-o{ background:#ffc72c; color:#161616; }
+  .cell.filled-o{ background:#ffc72c; color:#161616; cursor:default; }
   .cell.filled-o .cell-number{ color:rgba(0,0,0,0.3); }
   .cell.win-cell{ outline:3px solid #d8433b; outline-offset:-3px; }
   .cell.filled-x.win-cell .cell-number{ color:rgba(255,255,255,0.6); }
   .cell.filled-o.win-cell .cell-number{ color:rgba(0,0,0,0.5); }
+  .cell .cell-symbol{
+    font-weight:800;
+    font-size:clamp(14px,3vw,28px);
+    pointer-events:none;
+    z-index:1;
+  }
 
   /* ===== PAUSE MENU ===== */
   .pause-overlay{
@@ -316,8 +324,8 @@
 
   <!-- LANGUAGE SWITCH -->
   <div class="lang-switch" id="langSwitch">
-    <button id="btnLangEn" onclick="setLang('en')">🇬🇧 EN</button>
-    <button id="btnLangAr" onclick="setLang('ar')">🇸🇦 AR</button>
+    <button id="btnLangEn" onclick="setLang('en')">EN</button>
+    <button id="btnLangAr" onclick="setLang('ar')">AR</button>
   </div>
 
   <!-- ===== MAIN MENU ===== -->
@@ -333,11 +341,11 @@
     </div>
     <p class="brand-tagline" id="menuTagline">A fun team trivia board game</p>
     <div style="height:4px;"></div>
-    <button class="menu-btn yellow" id="btnPlay" onclick="showSetup()">▶ Play</button>
-    <button class="menu-btn" id="btnHow" onclick="showInfo('how')">📖 How to Play</button>
-    <button class="menu-btn" id="btnAbout" onclick="showInfo('about')">ℹ️ About</button>
+    <button class="menu-btn yellow" id="btnPlay" onclick="showSetup()">Play</button>
+    <button class="menu-btn" id="btnHow" onclick="showInfo('how')">How to Play</button>
+    <button class="menu-btn" id="btnAbout" onclick="showInfo('about')">About</button>
     <div class="menu-divider"></div>
-    <button class="menu-btn black" id="btnLangMenu" onclick="toggleLangFromMenu()" style="width:140px; font-size:15px; padding:10px 16px;">🌐 Language</button>
+    <button class="menu-btn black" id="btnLangMenu" onclick="toggleLangFromMenu()" style="width:140px; font-size:15px; padding:10px 16px;">Language</button>
   </div>
 
   <!-- ===== SETUP SCREEN ===== -->
@@ -381,7 +389,7 @@
       </select>
     </div>
     <button class="btn-primary" id="btnStartGame" onclick="startGame()">Start Game</button>
-    <button class="btn-ghost" onclick="showMenu()" id="btnBackMenu">← Back</button>
+    <button class="btn-ghost" onclick="showMenu()" id="btnBackMenu">Back</button>
   </div>
 
   <!-- ===== GAME SCREEN ===== -->
@@ -398,7 +406,7 @@
       </div>
       <div class="turn-pill" id="turnPill">Team X</div>
       <div class="topbar-right">
-        <button class="btn-secondary" onclick="togglePause()" id="btnPause" style="font-size:14px; padding:4px 14px;">⏸</button>
+        <button class="btn-secondary" onclick="togglePause()" id="btnPause" style="font-size:14px; padding:4px 14px;">||</button>
       </div>
     </div>
     <div class="game-main" id="gameMainArea">
@@ -421,27 +429,27 @@
   <!-- ===== PAUSE MENU ===== -->
   <div class="pause-overlay" id="pauseOverlay">
     <div class="pause-box">
-      <h2 id="pauseTitle">⏸ Paused</h2>
-      <button class="pause-btn yellow" onclick="togglePause()" id="pauseResume">▶ Resume</button>
-      <button class="pause-btn" onclick="pauseRestart()" id="pauseRestart">🔄 Restart Game</button>
-      <button class="pause-btn" onclick="pauseLangToggle()" id="pauseLang">🌐 Change Language</button>
-      <button class="pause-btn" onclick="pauseHowTo()" id="pauseHow">📖 How to Play</button>
+      <h2 id="pauseTitle">Paused</h2>
+      <button class="pause-btn yellow" onclick="togglePause()" id="pauseResume">Resume</button>
+      <button class="pause-btn" onclick="pauseRestart()" id="pauseRestart">Restart Game</button>
+      <button class="pause-btn" onclick="pauseLangToggle()" id="pauseLang">Change Language</button>
+      <button class="pause-btn" onclick="pauseHowTo()" id="pauseHow">How to Play</button>
       <div class="pause-divider"></div>
-      <button class="pause-btn black" onclick="pauseExit()" id="pauseExit">🚪 Exit to Main Menu</button>
+      <button class="pause-btn black" onclick="pauseExit()" id="pauseExit">Exit to Main Menu</button>
     </div>
   </div>
 
   <!-- ===== INFO PAGES ===== -->
   <div id="infoHow" class="info-page">
-    <h2 id="howTitle">📖 How to Play</h2>
-    <p id="howText">🎯 Two teams: X and O. Tap an empty square, answer a question. ✅ Correct → claim the square. ❌ Wrong → turn passes. First to get 5 in a row wins!</p>
-    <button class="menu-btn" onclick="closeInfo()" id="howBackBtn">← Back</button>
+    <h2 id="howTitle">How to Play</h2>
+    <p id="howText">Two teams: X and O. Tap an empty square, answer a question. Correct claim the square. Wrong turn passes. First to get 5 in a row wins!</p>
+    <button class="menu-btn" onclick="closeInfo()" id="howBackBtn">Back</button>
   </div>
   <div id="infoAbout" class="info-page">
-    <h2 id="aboutTitle">ℹ️ About</h2>
-    <p id="aboutDesc"><strong>Mazaj</strong> ☕<br>A simple party game for friends.</p>
+    <h2 id="aboutTitle">About</h2>
+    <p id="aboutDesc"><strong>Mazaj</strong><br>A simple party game for friends.</p>
     <p id="aboutDev"><strong>Developer:</strong> Tamim Aljabri</p>
-    <button class="menu-btn" onclick="closeInfo()" id="aboutBackBtn">← Back</button>
+    <button class="menu-btn" onclick="closeInfo()" id="aboutBackBtn">Back</button>
   </div>
 
   <!-- ===== CATEGORY MODAL ===== -->
@@ -451,13 +459,13 @@
       <p class="modal-sub" id="catSub">Pick one option below</p>
       <div class="category-grid">
         <button class="category-btn" onclick="chooseCategory('truth')">
-          <span class="cat-icon">💬</span><span id="catTruth">Truth</span>
+          <span class="cat-icon">T</span><span id="catTruth">Truth</span>
         </button>
         <button class="category-btn" onclick="chooseCategory('riddle')">
-          <span class="cat-icon">🧩</span><span id="catRiddle">Riddle</span>
+          <span class="cat-icon">R</span><span id="catRiddle">Riddle</span>
         </button>
         <button class="category-btn" onclick="chooseCategory('general')">
-          <span class="cat-icon">📚</span><span id="catGeneral">General</span>
+          <span class="cat-icon">G</span><span id="catGeneral">General</span>
         </button>
       </div>
       <button class="btn-ghost" onclick="cancelCategory()" id="catCancel" style="margin-top:4px;">Cancel</button>
@@ -472,8 +480,8 @@
       <div class="answer-reveal" id="qAnswer"></div>
       <button class="btn-reveal hidden" id="btnReveal" onclick="revealAnswer()">Show answer</button>
       <div class="modal-actions">
-        <button class="btn-correct" onclick="resolveAnswer(true)" id="btnCorrect">✓ Correct</button>
-        <button class="btn-wrong" onclick="resolveAnswer(false)" id="btnWrong">✗ Wrong</button>
+        <button class="btn-correct" onclick="resolveAnswer(true)" id="btnCorrect">Correct</button>
+        <button class="btn-wrong" onclick="resolveAnswer(false)" id="btnWrong">Wrong</button>
       </div>
     </div>
   </div>
@@ -513,7 +521,7 @@
 
 <script>
 /* ============================================================
-   MAZAJ – Numbered Squares (1,2,3... across the board)
+   MAZAJ – No Emojis, Fixed Board Click System
    ============================================================ */
 
 // ----- I18N -----
@@ -521,72 +529,72 @@ const I18N = {
   en: {
     title:"Mazaj", tagline:"A fun team trivia board game",
     teamx:"X Team", teamo:"O Team", nameLabel:"Team name", playersLabel:"Players",
-    startGame:"Start Game", back:"← Back", howTo:"How to Play", about:"About",
+    startGame:"Start Game", back:"Back", howTo:"How to Play", about:"About",
     teamXDefault:"Team X", teamODefault:"Team O",
     turnOf:(n)=>`${n}'s turn`,
     chooseCat:(n)=>`${n}, choose a category`,
     pickOne:"Pick one option",
     truth:"Truth", riddle:"Riddle", general:"General",
     cancel:"Cancel", showAnswer:"Show answer",
-    correct:"✓ Correct", wrong:"✗ Wrong",
-    resultCorrect:(n)=>`✅ ${n} answered correctly! Play again.`,
-    resultWrong:(n,next)=>`❌ Wrong. Turn moves to ${next}.`,
+    correct:"Correct", wrong:"Wrong",
+    resultCorrect:(n)=>`${n} answered correctly! Play again.`,
+    resultWrong:(n,next)=>`Wrong. Turn moves to ${next}.`,
     continue:"Continue",
-    win:(n)=>`${n} wins! 🎉`,
+    win:(n)=>`${n} wins!`,
     playAgain:"Play Again", newTeams:"New Teams",
     rulesTitle:"How to Play Mazaj",
-    rules:`<ul><li>Two teams: X and O, 1–10 players each.</li><li>Tap any empty square.</li><li>Choose Truth, Riddle, or General.</li><li>Discuss the answer together.</li><li>Correct → claim the square and play again.</li><li>Wrong → turn passes to the other team.</li><li>First to line up <b>5 in a row</b> wins!</li></ul>`,
+    rules:`<ul><li>Two teams: X and O, 1-10 players each.</li><li>Tap any empty square.</li><li>Choose Truth, Riddle, or General.</li><li>Discuss the answer together.</li><li>Correct claim the square and play again.</li><li>Wrong turn passes to the other team.</li><li>First to line up <b>5 in a row</b> wins!</li></ul>`,
     gotIt:"Got it",
     restartConfirm:"Restart the game? Progress will be lost.",
     yesRestart:"Yes, restart", cancelBtn:"Cancel",
     players:(n)=> n===1 ? "1 player" : `${n} players`,
-    aboutDesc:"Mazaj ☕ A simple party game for friends.",
+    aboutDesc:"Mazaj A simple party game for friends.",
     aboutDev:"Developer: Tamim Aljabri",
     rotate:"Please rotate to landscape mode",
-    menu:"Menu", langMenu:"🌐 Language",
+    menu:"Menu", langMenu:"Language",
     winLength:"Win length (3-10):",
     exit:"Exit",
-    pause:"⏸ Paused",
-    resume:"▶ Resume",
-    restartGame:"🔄 Restart Game",
-    changeLang:"🌐 Change Language",
-    howToPlay:"📖 How to Play",
-    exitMenu:"🚪 Exit to Main Menu"
+    pause:"Paused",
+    resume:"Resume",
+    restartGame:"Restart Game",
+    changeLang:"Change Language",
+    howToPlay:"How to Play",
+    exitMenu:"Exit to Main Menu"
   },
   ar: {
     title:"مزاج", tagline:"لعبة جماعية ممتعة",
     teamx:"فريق X", teamo:"فريق O", nameLabel:"اسم الفريق", playersLabel:"اللاعبين",
-    startGame:"ابدأ", back:"← رجوع", howTo:"طريقة اللعب", about:"حول",
+    startGame:"ابدأ", back:"رجوع", howTo:"طريقة اللعب", about:"حول",
     teamXDefault:"فريق X", teamODefault:"فريق O",
     turnOf:(n)=>`دور ${n}`,
     chooseCat:(n)=>`${n}، اختاروا نوع السؤال`,
     pickOne:"اختاروا أحد الخيارات",
     truth:"صراحة", riddle:"لغز", general:"ثقافي",
     cancel:"إلغاء", showAnswer:"عرض الإجابة",
-    correct:"✓ صحيح", wrong:"✗ خطأ",
-    resultCorrect:(n)=>`✅ أجاب ${n} بشكل صحيح! العبوا مرة أخرى.`,
-    resultWrong:(n,next)=>`❌ إجابة خاطئة. الدور لـ ${next}.`,
+    correct:"صحيح", wrong:"خطأ",
+    resultCorrect:(n)=>`أجاب ${n} بشكل صحيح! العبوا مرة أخرى.`,
+    resultWrong:(n,next)=>`إجابة خاطئة. الدور لـ ${next}.`,
     continue:"متابعة",
-    win:(n)=>`${n} هو الفائز! 🎉`,
+    win:(n)=>`${n} هو الفائز!`,
     playAgain:"العب مرة أخرى", newTeams:"فرق جديدة",
     rulesTitle:"طريقة لعب مزاج",
-    rules:`<ul><li>فريقان: X و O، من 1 إلى 10 لاعبين.</li><li>اضغط على مربع فارغ.</li><li>اختر: صراحة، لغز، أو ثقافي.</li><li>ناقشوا الإجابة معًا.</li><li>صحيح → احصل على المربع والعب مرة أخرى.</li><li>خطأ → ينتقل الدور للفريق الآخر.</li><li>أول فريق يكوّن <b>5 متتالية</b> يفوز!</li></ul>`,
+    rules:`<ul><li>فريقان: X و O، من 1 إلى 10 لاعبين.</li><li>اضغط على مربع فارغ.</li><li>اختر: صراحة، لغز، أو ثقافي.</li><li>ناقشوا الإجابة معًا.</li><li>صحيح احصل على المربع والعب مرة أخرى.</li><li>خطأ ينتقل الدور للفريق الآخر.</li><li>أول فريق يكوّن <b>5 متتالية</b> يفوز!</li></ul>`,
     gotIt:"فهمت",
     restartConfirm:"إعادة بدء اللعبة؟ سيتم فقدان التقدم.",
     yesRestart:"نعم، إعادة", cancelBtn:"إلغاء",
     players:(n)=> `${n} ${n===1?"لاعب":"لاعبين"}`,
-    aboutDesc:"مزاج ☕ لعبة جماعية بسيطة للأصدقاء.",
+    aboutDesc:"مزاج لعبة جماعية بسيطة للأصدقاء.",
     aboutDev:"المطور: تميم الجابري",
     rotate:"يرجى تدوير الجوال إلى الوضع الأفقي",
-    menu:"القائمة", langMenu:"🌐 اللغة",
+    menu:"القائمة", langMenu:"اللغة",
     winLength:"عدد المربعات للفوز (3-10):",
     exit:"خروج",
-    pause:"⏸ توقف مؤقت",
-    resume:"▶ استئناف",
-    restartGame:"🔄 إعادة اللعبة",
-    changeLang:"🌐 تغيير اللغة",
-    howToPlay:"📖 طريقة اللعب",
-    exitMenu:"🚪 الخروج إلى القائمة"
+    pause:"توقف مؤقت",
+    resume:"استئناف",
+    restartGame:"إعادة اللعبة",
+    changeLang:"تغيير اللغة",
+    howToPlay:"طريقة اللعب",
+    exitMenu:"الخروج إلى القائمة"
   }
 };
 
@@ -606,7 +614,7 @@ let currentQuestion = null;
 let pendingWin = false;
 let winnerTeam = null;
 
-// ----- Question Bank (shortened for brevity) -----
+// ----- Question Bank (shortened) -----
 const QUESTIONS = {
   en:{
     truth:["What's an embarrassing moment for your team?","If you could switch lives with a celebrity for a day, who?","What's a hidden talent someone on your team has?","What's the funniest nickname anyone on your team has had?","What's the first thing you'd buy with a lot of money?","What food does your whole team hate?","What's the worst gift someone on your team received?","Where would your team travel right now?","What childhood fear does someone on your team still have?","What useless skill does someone on your team have?","What business would your team start together?","What movie does your whole team think is overrated?","What small lie has someone on your team told recently?","What would be your team's theme song?","What would your team never do on a dare?","What weird habit does someone on your team have?","Which TV show would your team live in?","What rumor did someone on your team once believe?"],
@@ -650,9 +658,9 @@ function setLang(l){
 function applyTexts(){
   document.getElementById('menuTitle').textContent = t('title');
   document.getElementById('menuTagline').textContent = t('tagline');
-  document.getElementById('btnPlay').textContent = '▶ '+t('startGame');
-  document.getElementById('btnHow').textContent = '📖 '+t('howTo');
-  document.getElementById('btnAbout').textContent = 'ℹ️ '+t('about');
+  document.getElementById('btnPlay').textContent = t('startGame');
+  document.getElementById('btnHow').textContent = t('howTo');
+  document.getElementById('btnAbout').textContent = t('about');
   document.getElementById('btnLangMenu').textContent = t('langMenu');
 
   document.getElementById('setupTitle').textContent = t('startGame');
@@ -674,7 +682,7 @@ function applyTexts(){
   io.placeholder = t('teamODefault');
 
   document.getElementById('gameTitle').textContent = t('title');
-  document.getElementById('btnPause').textContent = '⏸';
+  document.getElementById('btnPause').textContent = '||';
 
   document.getElementById('catTruth').textContent = t('truth');
   document.getElementById('catRiddle').textContent = t('riddle');
@@ -860,7 +868,7 @@ function newRoundSameTeams(){
   document.getElementById('pauseOverlay').classList.remove('active');
 }
 
-// ----- Board with numbered squares -----
+// ----- Board with numbered squares - FIXED CLICK SYSTEM -----
 function buildBoard(){
   const boardEl = document.getElementById('board');
   boardEl.innerHTML = '';
@@ -870,9 +878,11 @@ function buildBoard(){
   let squareNumber = 1;
   for(let r=0;r<boardSize;r++){
     for(let c=0;c<boardSize;c++){
-      const cell = document.createElement('button');
+      const cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = `cell-${r}-${c}`;
+      cell.dataset.row = r;
+      cell.dataset.col = c;
       
       // Add number label
       const numberSpan = document.createElement('span');
@@ -880,20 +890,47 @@ function buildBoard(){
       numberSpan.textContent = squareNumber++;
       cell.appendChild(numberSpan);
       
-      cell.onclick = ()=> onCellTap(r,c);
+      // Add symbol placeholder
+      const symbolSpan = document.createElement('span');
+      symbolSpan.className = 'cell-symbol';
+      symbolSpan.id = `symbol-${r}-${c}`;
+      cell.appendChild(symbolSpan);
+      
+      // Direct click handler
+      cell.addEventListener('click', function(e) {
+        const row = parseInt(this.dataset.row);
+        const col = parseInt(this.dataset.col);
+        onCellTap(row, col);
+      });
+      
       boardEl.appendChild(cell);
     }
   }
 }
 
+function onCellTap(r,c){
+  // Prevent clicks if game is over
+  if(state.gameOver) {
+    return;
+  }
+  // Prevent clicks on already filled cells
+  if(state.board[r][c] !== null) {
+    return;
+  }
+  // Set pending cell and open category modal
+  state.pendingCell = {r,c};
+  openCategoryModal();
+}
+
 function renderCell(r,c){
   const val = state.board[r][c];
-  const el = document.getElementById(`cell-${r}-${c}`);
-  if(!el) return;
-  // The number is already in the cell as a child
+  const cell = document.getElementById(`cell-${r}-${c}`);
+  const symbolSpan = document.getElementById(`symbol-${r}-${c}`);
+  if(!cell || !symbolSpan) return;
+  
   if(val){
-    el.textContent = val;
-    el.classList.add('filled', val==='X'?'filled-x':'filled-o');
+    symbolSpan.textContent = val;
+    cell.classList.add('filled', val==='X'?'filled-x':'filled-o');
   }
 }
 
